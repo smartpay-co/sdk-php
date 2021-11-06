@@ -2,9 +2,11 @@
 
 namespace Tests\Smartpay;
 
+use Tests\TestCase;
+
 use Smartpay\Smartpay;
 
-final class SmartpayTest extends \PHPUnit\Framework\TestCase
+final class SmartpayTest extends TestCase
 {
     public function testApiUrlAccessors()
     {
