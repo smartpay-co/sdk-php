@@ -15,13 +15,18 @@ final class ApiTest extends TestCase
 {
     public function testCheckoutSession()
     {
+        $validPayload = [
+            'successURL' => 'https://mock.test/success_url',
+            'cancelURL' => 'https://mock.test/cancel_url',
+        ];
+
         $mock = new MockHandler([
-            new Response(200, ['X-Foo' => 'Bar'], 'Hello, World'),
+            new Response(200, ['X-Foo' => 'Bar'], '{}'),
         ]);
         $handlerStack = HandlerStack::create($mock);
         $client = new Client(new GuzzleClient(['handler' => $handlerStack]));
 
         $api = new Api('pk_test_mock', 'sk_test_mock', $client);
-        $this->assertSame('Hello, World', $api->checkoutSession(['raw' => 'foo'])->asJson());
+        $this->assertSame([], $api->checkoutSession($validPayload)->asJson());
     }
 }

@@ -18,11 +18,11 @@ class CheckoutSession
 
     public function asJson()
     {
-	return json_decode(strval($this->guzzlePayload->getBody()));
+	return json_decode(strval($this->guzzlePayload->getBody()), true);
     }
 
     public function redirectUrl()
     {
-	return Smartpay::getCheckoutUrl() . '/login?session-id=' . $this->asJson()->id . '&public-key' . Smartpay::getPublicKey();
+	return Smartpay::getCheckoutUrl() . '/login?session-id=' . $this->asJson()['id'] . '&public-key' . Smartpay::getPublicKey();
     }
 }
