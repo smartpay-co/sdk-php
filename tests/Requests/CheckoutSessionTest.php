@@ -48,7 +48,7 @@ final class CheckoutSessionTest extends TestCase
         ];
 
         $request = new CheckoutSession($payload);
-        $this->assertEqualsCanonicalizing($request->toRequest(), [
+        $this->assertEquals($request->toRequest(), [
             "customerInfo" => [
                 "accountAge" => 20,
                 "address" => [

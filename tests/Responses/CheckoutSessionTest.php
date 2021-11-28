@@ -23,7 +23,7 @@ final class CheckoutSessionTest extends TestCase
         );
 
         $this->assertSame(
-            'https://checkout.smartpay.co/login?session-id=checkout_test_oTQpCvZzZ52UvKbrN5i4B8&public-keypk_test_1234',
+            'https://checkout.smartpay.co/login?session-id=checkout_test_oTQpCvZzZ52UvKbrN5i4B8&public-key=pk_test_1234',
             $response->redirectUrl()
         );
     }

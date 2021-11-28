@@ -6,12 +6,12 @@ use Smartpay\Smartpay;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
-    public function setUp(): void
+    public function setUp()
     {
         Smartpay::reset();
     }
 
-    public function tearDown(): void
+    public function tearDown()
     {
         Smartpay::reset();
     }
