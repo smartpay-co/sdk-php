@@ -23,7 +23,9 @@ class Smartpay
 
     public static function reset()
     {
-	self::$apiUrl = self::DEFAULT_API_URL;
+	$SMARTPAY_API_PREFIX = getenv('SMARTPAY_API_PREFIX');
+
+	self::$apiUrl = $SMARTPAY_API_PREFIX ? $SMARTPAY_API_PREFIX : self::DEFAULT_API_URL;
 	self::$checkoutUrl = self::DEFAULT_CHECKOUT_URL;
 	self::$postTimeout = self::DEFAULT_POST_TIMEOUT;
 	self::$publicKey = null;
