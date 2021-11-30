@@ -167,7 +167,9 @@ class CheckoutSession
 
 		return [
 			'address' => $address,
-			'addressType' => $this->getOrNull($data, 'addressType')
+			'addressType' => $this->getOrNull($data, 'addressType'),
+			'feeAmount' => $this->getOrNull($data, 'feeAmount'),
+			'feeCurrency' => $this->getOr($data, 'feeCurrency', $this->currency)
 		];
 	}
 
@@ -236,6 +238,16 @@ class CheckoutSession
 	private function getOrNull($array, $key)
 	{
 		$value = null;
+		if (array_key_exists($key, $array)) {
+			$value = $array[$key];
+		}
+		return $value;
+	}
+
+
+	private function getOr($array, $key, $default)
+	{
+		$value = $default;
 		if (array_key_exists($key, $array)) {
 			$value = $array[$key];
 		}
