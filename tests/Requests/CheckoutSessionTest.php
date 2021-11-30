@@ -111,7 +111,9 @@ final class CheckoutSessionTest extends TestCase
                         "postalCode" => "123",
                         "subLocality" => null
                     ],
-                    "addressType" => null
+                    "addressType" => null,
+                    "feeAmount" => null,
+                    "feeCurrency" => "JPY"
                 ]
             ],
             "reference" => "order_ref_1234567",
