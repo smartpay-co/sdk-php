@@ -16,17 +16,17 @@ class Api
 
     public function __construct($publicKey, $secretKey, $client = Null)
     {
-	Smartpay::setPublicKey($publicKey);
-	Smartpay::setSecretKey($secretKey);
+        Smartpay::setPublicKey($publicKey);
+        Smartpay::setSecretKey($secretKey);
 
-	$this->client = is_null($client) ? new Client() : $client;
+        $this->client = is_null($client) ? new Client() : $client;
     }
 
     public function checkoutSession($rawPayload)
     {
-	$request = new CheckoutSessionRequest($rawPayload);
-	return new CheckoutSessionResponse(
-	    $this->client->post('/checkout-sessions', $request->toRequest())
-	);
+        $request = new CheckoutSessionRequest($rawPayload);
+        return new CheckoutSessionResponse(
+            $this->client->post('/checkout-sessions', $request->toRequest())
+        );
     }
 }

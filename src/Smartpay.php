@@ -23,71 +23,71 @@ class Smartpay
 
     public static function reset()
     {
-	$SMARTPAY_API_PREFIX = getenv('SMARTPAY_API_PREFIX');
+        $SMARTPAY_API_PREFIX = getenv('SMARTPAY_API_PREFIX');
 
-	self::$apiUrl = $SMARTPAY_API_PREFIX ? $SMARTPAY_API_PREFIX : self::DEFAULT_API_URL;
-	self::$checkoutUrl = self::DEFAULT_CHECKOUT_URL;
-	self::$postTimeout = self::DEFAULT_POST_TIMEOUT;
-	self::$publicKey = null;
-	self::$secretKey = null;
+        self::$apiUrl = $SMARTPAY_API_PREFIX ? $SMARTPAY_API_PREFIX : self::DEFAULT_API_URL;
+        self::$checkoutUrl = self::DEFAULT_CHECKOUT_URL;
+        self::$postTimeout = self::DEFAULT_POST_TIMEOUT;
+        self::$publicKey = null;
+        self::$secretKey = null;
     }
 
     public static function setApiUrl($apiUrl)
     {
-	self::$apiUrl = $apiUrl;
+        self::$apiUrl = $apiUrl;
     }
 
     public static function setCheckoutUrl($checkoutUrl)
     {
-	self::$checkoutUrl = $checkoutUrl;
+        self::$checkoutUrl = $checkoutUrl;
     }
 
     public static function setPostTimeout($postTimeout)
     {
-	self::$postTimeout = $postTimeout;
+        self::$postTimeout = $postTimeout;
     }
 
     public static function setPublicKey($publicKey)
     {
-	self::$publicKey = $publicKey;
+        self::$publicKey = $publicKey;
     }
 
     public static function setSecretKey($secretKey)
     {
-	self::$secretKey = $secretKey;
+        self::$secretKey = $secretKey;
     }
 
     public static function getApiUrl()
     {
-	if(is_null(self::$apiUrl)) {
-	    self::setApiUrl(self::DEFAULT_API_URL);
-	}
-	return self::$apiUrl;
+        if (is_null(self::$apiUrl)) {
+            self::setApiUrl(self::DEFAULT_API_URL);
+        }
+        return self::$apiUrl;
     }
 
     public static function getCheckoutUrl()
     {
-	if(is_null(self::$checkoutUrl)) {
-	    self::setCheckoutUrl(self::DEFAULT_CHECKOUT_URL);
-	}
-	return self::$checkoutUrl;
+        if (is_null(self::$checkoutUrl)) {
+            self::setCheckoutUrl(self::DEFAULT_CHECKOUT_URL);
+        }
+        return self::$checkoutUrl;
     }
 
     public static function getPostTimeout()
     {
-	if(intval(self::$postTimeout) === 0) {
-	    self::setPostTimeout(self::DEFAULT_POST_TIMEOUT);
-	}
-	return self::$postTimeout;
+        if (intval(self::$postTimeout) === 0) {
+            self::setPostTimeout(self::DEFAULT_POST_TIMEOUT);
+        }
+        return self::$postTimeout;
     }
 
     public static function getPublicKey()
     {
-	return self::$publicKey;
+        return self::$publicKey;
     }
 
     public static function getSecretKey()
     {
-	return self::$secretKey;
+        return self::$secretKey;
     }
 }
