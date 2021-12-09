@@ -80,15 +80,30 @@ class CheckoutSession
 		if (array_key_exists('orderData', $this->rawPayload)) {
 			if (array_key_exists('amount', $this->rawPayload['orderData'])) {
 				$this->amount = $this->rawPayload['orderData']['amount'];
+
+				return;
 			}
 		}
 
-		if ($this->amount === 0.0) {
-			if (count($this->item) > 0) {
-				for ($i = 0; $i < count($this->item); ++$i) {
-					if (array_key_exists('amount', $this->item[$i])) {
-						$this->amount += $this->item[$i]['amount'];
-					}
+		if (
+			array_key_exists('shipping', $this->rawPayload) &&
+			array_key_exists('feeAmount', $this->rawPayload['shipping'])
+		) {
+			$this->amount = $this->rawPayload['shipping']['feeAmount'];
+		}
+
+		if (
+			array_key_exists('orderData', $this->rawPayload) &&
+			array_key_exists('shippingInfo', $this->rawPayload['orderData']) &&
+			array_key_exists('feeAmount', $this->rawPayload['orderData']['shippingInfo'])
+		) {
+			$this->amount = $this->rawPayload['orderData']['shippingInfo']['amount'];
+		}
+
+		if (count($this->item) > 0) {
+			for ($i = 0; $i < count($this->item); ++$i) {
+				if (array_key_exists('amount', $this->item[$i])) {
+					$this->amount += $this->item[$i]['amount'];
 				}
 			}
 		}
