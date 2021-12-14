@@ -180,12 +180,24 @@ class CheckoutSession
 			? $this->normalizeAddress($data)
 			: $data['address'];
 
-		return [
+		$shippingInfo = [
 			'address' => $address,
 			'addressType' => $this->getOrNull($data, 'addressType'),
-			'feeAmount' => $this->getOrNull($data, 'feeAmount'),
-			'feeCurrency' => $this->getOr($data, 'feeCurrency', $this->currency)
 		];
+
+		$feeAmount = $this->getOrNull($data, 'feeAmount');
+
+		if ($feeAmount) {
+			$shippingInfo['feeAmount'] = $feeAmount;
+		}
+
+		$feeCurrency = $this->getOr($data, 'feeCurrency', $this->currency);
+
+		if ($feeCurrency) {
+			$shippingInfo['feeCurrency'] = $feeCurrency;
+		}
+
+		return $shippingInfo;
 	}
 
 	private function normalizeAddress($data)
