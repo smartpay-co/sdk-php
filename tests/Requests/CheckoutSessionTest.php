@@ -39,7 +39,8 @@ final class CheckoutSessionTest extends TestCase
                 "line1" => "line1",
                 "locality" => "locality",
                 "postalCode" => "123",
-                "country" => "JP"
+                "country" => "JP",
+                "feeAmount" => 100,
             ],
             "reference" => "order_ref_1234567",
             "successURL" => "https://docs.smartpay.co/example-pages/checkout-successful",
@@ -71,7 +72,7 @@ final class CheckoutSessionTest extends TestCase
                 "reference" => null
             ],
             "orderData" => [
-                "amount" => 250.0,
+                "amount" => 350.0,
                 "captureMethod" => null,
                 "confirmationMethod" => null,
                 "coupons" => null,
@@ -112,7 +113,7 @@ final class CheckoutSessionTest extends TestCase
                         "subLocality" => null
                     ],
                     "addressType" => null,
-                    "feeAmount" => null,
+                    "feeAmount" => 100,
                     "feeCurrency" => "JPY"
                 ]
             ],

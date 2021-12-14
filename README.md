@@ -98,14 +98,20 @@ Then, you can redirect your customer to the session url by calling `redirectUrl`
 $session->redirectUrl()
 ```
 
-## Contributing
+## Test
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/smartpay. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/smartpay/blob/master/CODE_OF_CONDUCT.md).
+Install dependencies
+
+```shell
+composer i
+```
+
+Run test in the folder
+
+```shell
+./vendor/bin/phpunit tests
+```
 
 ## License
 
 The package is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the Smartpay project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/smartpay/blob/master/CODE_OF_CONDUCT.md).
