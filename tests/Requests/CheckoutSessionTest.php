@@ -9,6 +9,8 @@ final class CheckoutSessionTest extends TestCase
 {
     public function testToRequest_1()
     {
+        $CODE = "ZOO";
+
         $payload = [
             "items" => [[
                 "name" => "オリジナルス STAN SMITH",
@@ -45,7 +47,7 @@ final class CheckoutSessionTest extends TestCase
             "reference" => "order_ref_1234567",
             "successURL" => "https://docs.smartpay.co/example-pages/checkout-successful",
             "cancelURL" => "https://docs.smartpay.co/example-pages/checkout-canceled",
-            "test" => true
+            "promotionCode" => $CODE,
         ];
 
         $request = new CheckoutSession($payload);
@@ -118,10 +120,11 @@ final class CheckoutSessionTest extends TestCase
                 ]
             ],
             "reference" => "order_ref_1234567",
-            "metadata" => null,
+            "metadata" => [
+                "__promotion_code__" => $CODE,
+            ],
             "successUrl" => "https://docs.smartpay.co/example-pages/checkout-successful",
             "cancelUrl" => "https://docs.smartpay.co/example-pages/checkout-canceled",
-            "test" => true
         ]);
     }
 
@@ -162,7 +165,6 @@ final class CheckoutSessionTest extends TestCase
             "reference" => "order_ref_1234567",
             "successURL" => "https://docs.smartpay.co/example-pages/checkout-successful",
             "cancelURL" => "https://docs.smartpay.co/example-pages/checkout-canceled",
-            "test" => true
         ];
 
         $request = new CheckoutSession($payload);
@@ -234,10 +236,9 @@ final class CheckoutSessionTest extends TestCase
                 ]
             ],
             "reference" => "order_ref_1234567",
-            "metadata" => null,
+            "metadata" => [],
             "successUrl" => "https://docs.smartpay.co/example-pages/checkout-successful",
             "cancelUrl" => "https://docs.smartpay.co/example-pages/checkout-canceled",
-            "test" => true
         ]);
     }
 }

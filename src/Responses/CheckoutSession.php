@@ -23,6 +23,14 @@ class CheckoutSession
 
     public function redirectUrl()
     {
-        return Smartpay::getCheckoutUrl() . '/login?session-id=' . $this->asJson()['id'] . '&public-key=' . Smartpay::getPublicKey();
+        $session = $this->asJson();
+
+        $url = Smartpay::getCheckoutUrl() . '/login?session-id=' . $session['id'] . '&public-key=' . Smartpay::getPublicKey();
+
+        if (array_key_exists('metadata', $session) && array_key_exists('__promotion_code__', $session['metadata'])) {
+            $url = $url . '&promotion-code=' . $session['metadata']['__promotion_code__'];
+        }
+
+        return $url;
     }
 }
