@@ -38,6 +38,7 @@ class CheckoutSession
 		$this->setTotalAmount();
 
 		$this->normalizePayload = $this->normalize();
+
 		return $this->normalizePayload;
 	}
 
@@ -111,20 +112,27 @@ class CheckoutSession
 
 	private function normalize()
 	{
+		$promotionCode = $this->getOrNull($this->rawPayload, 'promotionCode');
+		$metadata = $this->getOr($this->rawPayload, 'metadata', []);
+
+		if ($promotionCode) {
+			$metadata['__promotion_code__'] = $promotionCode;
+		}
+
 		return [
 			'customerInfo' => $this->normalizeCustomerInfo(),
 			'orderData' => $this->normalizeOrderData(),
 			'reference' => $this->getOrNull($this->rawPayload, 'reference'),
-			'metadata' => $this->getOrNull($this->rawPayload, 'metadata'),
+			'metadata' => $metadata,
 			'successUrl' => $this->getOrNull($this->rawPayload, 'successURL'),
 			'cancelUrl' => $this->getOrNull($this->rawPayload, 'cancelURL'),
-			'test' => $this->getOrNull($this->rawPayload, 'test')
 		];
 	}
 
 	private function normalizeCustomerInfo()
 	{
 		$data = [];
+
 		if (array_key_exists('customerInfo', $this->rawPayload)) {
 			$data = $this->rawPayload['customerInfo'];
 		} else if (array_key_exists('customer', $this->rawPayload)) {
@@ -134,6 +142,7 @@ class CheckoutSession
 		$email = $this->getOrNull($data, 'emailAddress');
 		$phone = $this->getOrNull($data, 'phoneNumber');
 		$gender = $this->getOrNull($data, 'legalGender');
+
 		return [
 			'accountAge' => $this->getOrNull($data, 'accountAge'),
 			'emailAddress' => is_null($email) ? $this->getOrNull($data, 'email') : $email,

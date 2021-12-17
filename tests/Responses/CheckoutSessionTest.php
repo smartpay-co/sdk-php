@@ -15,7 +15,7 @@ final class CheckoutSessionTest extends TestCase
         $this->assertSame([], $response->asJson());
     }
 
-    public function testRedirectUrl()
+    public function testRedirectUrl1()
     {
         Smartpay::setPublicKey('pk_test_1234');
         $response = new CheckoutSession(
@@ -24,6 +24,19 @@ final class CheckoutSessionTest extends TestCase
 
         $this->assertSame(
             'https://checkout.smartpay.co/login?session-id=checkout_test_oTQpCvZzZ52UvKbrN5i4B8&public-key=pk_test_1234',
+            $response->redirectUrl()
+        );
+    }
+
+    public function testRedirectUrl2()
+    {
+        Smartpay::setPublicKey('pk_test_1234');
+        $response = new CheckoutSession(
+            new Response(200, ['X-Foo' => 'Bar'], '{"id": "checkout_test_oTQpCvZzZ52UvKbrN5i4B8", "metadata": {"__promotion_code__": "ABCD"}}')
+        );
+
+        $this->assertSame(
+            'https://checkout.smartpay.co/login?session-id=checkout_test_oTQpCvZzZ52UvKbrN5i4B8&public-key=pk_test_1234&promotion-code=ABCD',
             $response->redirectUrl()
         );
     }
