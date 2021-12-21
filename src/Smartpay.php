@@ -13,6 +13,7 @@ class Smartpay
     const DEFAULT_API_URL = "https://api.smartpay.co/v1";
     const DEFAULT_CHECKOUT_URL = "https://checkout.smartpay.co";
     const DEFAULT_POST_TIMEOUT = 30;
+    const DEFAULT_PAGE_COUNT = 20;
 
     public static $apiUrl = self::DEFAULT_API_URL;
     public static $checkoutUrl = self::DEFAULT_CHECKOUT_URL;

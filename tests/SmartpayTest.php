@@ -10,8 +10,6 @@ final class SmartpayTest extends TestCase
 {
     public function testApiUrlAccessors()
     {
-        static::assertSame('https://api.smartpay.co/v1', Smartpay::getApiUrl());
-
         Smartpay::setApiUrl(Null);
         static::assertSame('https://api.smartpay.co/v1', Smartpay::getApiUrl());
 

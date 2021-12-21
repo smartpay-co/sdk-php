@@ -26,10 +26,18 @@ class Client
 		}
 	}
 
-	public function post($path, $rawPayload)
+	public function get($path, $rawParams)
 	{
-		$payload = array_merge($rawPayload, $this->defaultPayload());
-		return $this->client->post(Smartpay::getApiUrl() . $path, ['json' => $payload, 'headers' => $this->headers()]);
+		$params = array_merge($rawParams, $this->defaultPayload());
+
+		return $this->client->get(Smartpay::getApiUrl() . $path, ['query' => $params, 'headers' => $this->headers()]);
+	}
+
+	public function post($path, $payload)
+	{
+		$params = $this->defaultPayload();
+
+		return $this->client->post(Smartpay::getApiUrl() . $path, ['json' => $payload, 'query' => $params, 'headers' => $this->headers()]);
 	}
 
 	private function headers()
