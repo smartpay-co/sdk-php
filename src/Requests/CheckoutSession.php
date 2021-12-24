@@ -113,9 +113,13 @@ class CheckoutSession
 	private function normalize()
 	{
 		$promotionCode = $this->getOrNull($this->rawPayload, 'promotionCode');
-		$metadata = $this->getOr($this->rawPayload, 'metadata', []);
+		$metadata = $this->getOrNull($this->rawPayload, 'metadata');
 
 		if ($promotionCode) {
+			if (!$metadata) {
+				$metadata = [];
+			}
+
 			$metadata['__promotion_code__'] = $promotionCode;
 		}
 
@@ -196,7 +200,7 @@ class CheckoutSession
 
 		$feeAmount = $this->getOrNull($data, 'feeAmount');
 
-		if ($feeAmount) {
+		if (isset($feeAmount)) {
 			$shippingInfo['feeAmount'] = $feeAmount;
 		}
 
