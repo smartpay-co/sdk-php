@@ -6,6 +6,7 @@ use Smartpay\Client;
 use Smartpay\Smartpay;
 use Smartpay\Requests\CheckoutSession as CheckoutSessionRequest;
 use Smartpay\Responses\CheckoutSession as CheckoutSessionResponse;
+use Smartpay\Responses\Orders as OrdersResponse;
 
 /**
  * Class Smartpay.
@@ -27,6 +28,18 @@ class Api
         $request = new CheckoutSessionRequest($rawPayload);
         return new CheckoutSessionResponse(
             $this->client->post('/checkout-sessions', $request->toRequest())
+        );
+    }
+
+    public function orders($params = [])
+    {
+        $parsedParams = [
+            'page' => isset($params['page']) ? $params['page'] : 1,
+            'count' => isset($params['count']) ? $params['count'] : Smartpay::DEFAULT_PAGE_COUNT,
+        ];
+
+        return new OrdersResponse(
+            $this->client->get('/orders', $parsedParams)
         );
     }
 }
