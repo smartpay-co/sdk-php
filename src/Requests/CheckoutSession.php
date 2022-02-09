@@ -112,22 +112,9 @@ class CheckoutSession
 
 	private function normalize()
 	{
-		$promotionCode = $this->getOrNull($this->rawPayload, 'promotionCode');
-		$metadata = $this->getOrNull($this->rawPayload, 'metadata');
-
-		if ($promotionCode) {
-			if (!$metadata) {
-				$metadata = [];
-			}
-
-			$metadata['__promotion_code__'] = $promotionCode;
-		}
-
 		return [
 			'customerInfo' => $this->normalizeCustomerInfo(),
 			'orderData' => $this->normalizeOrderData(),
-			'reference' => $this->getOrNull($this->rawPayload, 'reference'),
-			'metadata' => $metadata,
 			'successUrl' => $this->getOrNull($this->rawPayload, 'successURL'),
 			'cancelUrl' => $this->getOrNull($this->rawPayload, 'cancelURL'),
 		];
@@ -172,6 +159,9 @@ class CheckoutSession
 			? $this->normalizeItemData($this->getOrNull($this->rawPayload, 'items'))
 			: $this->normalizeItemData($this->rawPayload['lineItemData']);
 
+		$metadata = is_null($this->getOrNull($this->rawPayload, 'metadata'))
+			? [] : $this->rawPayload['metadata'];
+
 		return [
 			'amount' => $this->amount,
 			'currency' => $this->currency,
@@ -180,6 +170,8 @@ class CheckoutSession
 			'coupons' => $this->getOrNull($this->rawPayload, 'coupons'),
 			'shippingInfo' => $shiippingInfo,
 			'lineItemData' => $items,
+			'reference' => $this->getOrNull($this->rawPayload, 'reference'),
+			'metadata' => $metadata
 		];
 	}
 
