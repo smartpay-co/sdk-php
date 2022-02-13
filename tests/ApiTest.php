@@ -16,8 +16,10 @@ final class ApiTest extends TestCase
     public function testCheckoutSession()
     {
         $validPayload = [
-            'successURL' => 'https://mock.test/success_url',
-            'cancelURL' => 'https://mock.test/cancel_url',
+            'successUrl' => 'https://mock.test/success_url',
+            'cancelUrl' => 'https://mock.test/cancel_url',
+            'items' => [],
+            'currency' => 'JPY'
         ];
 
         $mock = new MockHandler([

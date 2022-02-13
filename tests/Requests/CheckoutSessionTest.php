@@ -10,6 +10,8 @@ final class CheckoutSessionTest extends TestCase
     public function testToRequest()
     {
         $payload = [
+            "amount" => 350,
+            "currency" => "JPY",
             "items" => [[
                 "name" => "オリジナルス STAN SMITH",
                 "amount" => 250,
@@ -42,8 +44,8 @@ final class CheckoutSessionTest extends TestCase
                 "country" => "JP",
             ],
             "reference" => "order_ref_1234567",
-            "successURL" => "https://docs.smartpay.co/example-pages/checkout-successful",
-            "cancelURL" => "https://docs.smartpay.co/example-pages/checkout-canceled",
+            "successUrl" => "https://docs.smartpay.co/example-pages/checkout-successful",
+            "cancelUrl" => "https://docs.smartpay.co/example-pages/checkout-canceled",
         ];
 
         $request = new CheckoutSession($payload);
@@ -69,52 +71,49 @@ final class CheckoutSessionTest extends TestCase
                 "phoneNumber" => null,
                 "reference" => null
             ],
-            "orderData" => [
-                "reference" => "order_ref_1234567",
-                "metadata" => [],
-                "amount" => 250.0,
-                "captureMethod" => null,
-                "confirmationMethod" => null,
-                "coupons" => null,
+            "reference" => "order_ref_1234567",
+            "metadata" => [],
+            "amount" => 350,
+            "captureMethod" => null,
+            "confirmationMethod" => null,
+            "currency" => "JPY",
+            "items" => [[
+                "description" => null,
+                "priceDescription" => null,
+                "productDescription" => null,
+                "metadata" => null,
+                "priceMetadata" => null,
+                "productMetadata" => null,
+                "amount" => 250,
                 "currency" => "JPY",
-                "lineItemData" => [[
-                    "description" => null,
-                    "metadata" => null,
-                    "price" => null,
-                    "priceData" => [
-                        "amount" => 250.0,
-                        "currency" => "JPY",
-                        "metadata" => null,
-                        "productData" => [
-                            "brand" => null,
-                            "categories" => null,
-                            "description" => null,
-                            "gtin" => null,
-                            "images" => null,
-                            "metadata" => null,
-                            "name" => "オリジナルス STAN SMITH",
-                            "reference" => null,
-                            "url" => null
-                        ]
-                    ],
-                    "quantity" => 1
-                ]],
-                "shippingInfo" => [
-                    "address" => [
-                        "administrativeArea" => null,
-                        "country" => "JP",
-                        "line1" => "line1",
-                        "line2" => null,
-                        "line3" => null,
-                        "line4" => null,
-                        "line5" => null,
-                        "locality" => "locality",
-                        "postalCode" => "123",
-                        "subLocality" => null
-                    ],
-                    "addressType" => null,
-                    "feeCurrency" => "JPY"
-                ]
+                "metadata" => null,
+                "brand" => null,
+                "label" => null,
+                "categories" => null,
+                "description" => null,
+                "gtin" => null,
+                "images" => null,
+                "metadata" => null,
+                "name" => "オリジナルス STAN SMITH",
+                "reference" => null,
+                "url" => null,
+                "quantity" => 1
+            ]],
+            "shippingInfo" => [
+                "address" => [
+                    "administrativeArea" => null,
+                    "country" => "JP",
+                    "line1" => "line1",
+                    "line2" => null,
+                    "line3" => null,
+                    "line4" => null,
+                    "line5" => null,
+                    "locality" => "locality",
+                    "postalCode" => "123",
+                    "subLocality" => null
+                ],
+                "addressType" => null,
+                "feeCurrency" => "JPY"
             ],
             "successUrl" => "https://docs.smartpay.co/example-pages/checkout-successful",
             "cancelUrl" => "https://docs.smartpay.co/example-pages/checkout-canceled",
