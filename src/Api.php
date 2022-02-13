@@ -6,7 +6,7 @@ use Smartpay\Client;
 use Smartpay\Smartpay;
 use Smartpay\Requests\CheckoutSession as CheckoutSessionRequest;
 use Smartpay\Responses\CheckoutSession as CheckoutSessionResponse;
-use Smartpay\Responses\Orders as OrdersResponse;
+use Smartpay\Responses\Order as OrdersResponse;
 
 /**
  * Class Smartpay.
@@ -31,7 +31,7 @@ class Api
         );
     }
 
-    public function orders($params = [])
+    public function getOrders($params = [])
     {
         $parsedParams = [
             'page' => isset($params['page']) ? $params['page'] : 1,
