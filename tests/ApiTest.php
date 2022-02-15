@@ -16,8 +16,10 @@ final class ApiTest extends TestCase
     public function testCheckoutSession()
     {
         $validPayload = [
-            'successURL' => 'https://mock.test/success_url',
-            'cancelURL' => 'https://mock.test/cancel_url',
+            'successUrl' => 'https://mock.test/success_url',
+            'cancelUrl' => 'https://mock.test/cancel_url',
+            'items' => [],
+            'currency' => 'JPY'
         ];
 
         $mock = new MockHandler([
@@ -28,5 +30,17 @@ final class ApiTest extends TestCase
 
         $api = new Api('pk_test_mock', 'sk_test_mock', $client);
         $this->assertSame([], $api->checkoutSession($validPayload)->asJson());
+    }
+
+    public function testGetOrders()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['X-Foo' => 'Bar'], '{}'),
+        ]);
+        $handlerStack = HandlerStack::create($mock);
+        $client = new Client(new GuzzleClient(['handler' => $handlerStack]));
+
+        $api = new Api('pk_test_mock', 'sk_test_mock', $client);
+        $this->assertSame([], $api->getOrders()->asJson());
     }
 }

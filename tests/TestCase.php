@@ -29,14 +29,4 @@ class TestCase extends \PHPUnit\Framework\TestCase
     {
         Smartpay::reset();
     }
-
-
-    public function testCreateCheckoutSession(): void
-    {
-        $api = new \Smartpay\Api(TestCase::PUBLIC_KEY, TestCase::SECRET_KEY);
-
-        $data = $api->orders()->asJson();
-
-        $this->assertSame(20, count($data['orders']));
-    }
 }
