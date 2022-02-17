@@ -8,7 +8,7 @@ namespace Smartpay;
 class Smartpay
 {
     const DEV_LANG = 'php';
-    const VERSION = '0.1.5';
+    const VERSION = '0.2.0';
 
     const DEFAULT_API_URL = "https://api.smartpay.co/v1";
     const DEFAULT_CHECKOUT_URL = "https://checkout.smartpay.co";
