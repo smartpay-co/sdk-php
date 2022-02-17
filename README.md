@@ -81,8 +81,8 @@ $payload = [
     'country' => 'JP',
   ],
   'reference' => 'order_ref_1234567',
-  'successURL' => 'https://docs.smartpay.co/example-pages/checkout-successful',
-  'cancelURL' => 'https://docs.smartpay.co/example-pages/checkout-canceled'
+  'successUrl' => 'https://docs.smartpay.co/example-pages/checkout-successful',
+  'cancelUrl' => 'https://docs.smartpay.co/example-pages/checkout-canceled'
 ];
 ```
 

@@ -41,11 +41,11 @@ class CheckoutSession
 	{
 		$this->currency = $this->getOrNull($this->rawPayload, 'currency');
 
-		$shiippingInfo = is_null($this->getOrNull($this->rawPayload, 'shippingInfo'))
+		$shippingInfo = is_null($this->getOrNull($this->rawPayload, 'shippingInfo'))
 			? $this->normalizeShippingInfo($this->getOrNull($this->rawPayload, 'shipping'))
 			: $this->rawPayload['shippingInfo'];
 
-		$metadata = is_null($this->getOrNull($this->rawPayload, 'metadata')) ? [] : $this->rawPayload['metadata'];
+		$metadata = is_null($this->getOrNull($this->rawPayload, 'metadata')) ? null : $this->rawPayload['metadata'];
 
 		return [
 			'customerInfo' => $this->normalizeCustomerInfo(),
@@ -53,7 +53,7 @@ class CheckoutSession
 			'currency' => $this->currency,
 			'captureMethod' => $this->getOrNull($this->rawPayload, 'captureMethod'),
 			'confirmationMethod' => $this->getOrNull($this->rawPayload, 'confirmationMethod'),
-			'shippingInfo' => $shiippingInfo,
+			'shippingInfo' => $shippingInfo,
 			'items' => $this->normalizeItemData($this->getOrNull($this->rawPayload, 'items')),
 			'reference' => $this->getOrNull($this->rawPayload, 'reference'),
 			'metadata' => $metadata,
