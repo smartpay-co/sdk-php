@@ -28,7 +28,7 @@ class CheckoutSession
         $url = $session['url'];
 
         if ($options && array_key_exists('promotionCode', $options)) {
-            $url = $url . '&promotion-code=' . $options['promotionCode'];
+            $url = $url . '?promotion-code=' . $options['promotionCode'];
         }
 
         return $url;
