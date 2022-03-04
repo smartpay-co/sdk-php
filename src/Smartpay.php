@@ -15,6 +15,9 @@ class Smartpay
     const DEFAULT_POST_TIMEOUT = 30;
     const DEFAULT_PAGE_COUNT = 20;
 
+    const REJECT_REQUEST_BY_CUSTOMER = 'requested_by_customer';
+    const REJECT_FRAUDULENT = 'fraudulent';
+
     public static $apiUrl = self::DEFAULT_API_URL;
     public static $checkoutUrl = self::DEFAULT_CHECKOUT_URL;
     public static $postTimeout = self::DEFAULT_POST_TIMEOUT;
