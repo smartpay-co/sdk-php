@@ -21,14 +21,14 @@ class CheckoutSession
         return json_decode(strval($this->guzzlePayload->getBody()), true);
     }
 
-    public function redirectUrl()
+    public function redirectUrl($options = [])
     {
         $session = $this->asJson();
 
-        $url = Smartpay::getCheckoutUrl() . '/login?session-id=' . $session['id'] . '&public-key=' . Smartpay::getPublicKey();
+        $url = $session['url'];
 
-        if (array_key_exists('metadata', $session) && array_key_exists('__promotion_code__', $session['metadata'])) {
-            $url = $url . '&promotion-code=' . $session['metadata']['__promotion_code__'];
+        if ($options && array_key_exists('promotionCode', $options)) {
+            $url = $url . '&promotion-code=' . $options['promotionCode'];
         }
 
         return $url;
