@@ -6,6 +6,10 @@ use Smartpay\Client;
 use Smartpay\Smartpay;
 use Smartpay\Requests\CheckoutSession as CheckoutSessionRequest;
 use Smartpay\Responses\CheckoutSession as CheckoutSessionResponse;
+use Smartpay\Requests\Payment as PaymentRequest;
+use Smartpay\Responses\Payment as PaymentResponse;
+use Smartpay\Requests\Refund as RefundRequest;
+use Smartpay\Responses\Refund as RefundResponse;
 use Smartpay\Responses\Order as OrdersResponse;
 
 /**
@@ -34,12 +38,51 @@ class Api
     public function getOrders($params = [])
     {
         $parsedParams = [
-            'page' => isset($params['page']) ? $params['page'] : 1,
-            'count' => isset($params['count']) ? $params['count'] : Smartpay::DEFAULT_PAGE_COUNT,
+            'pageToken' => isset($params['pageToken']) ? $params['pageToken'] : null,
+            'maxResults' => isset($params['maxResults']) ? $params['maxResults'] : null,
+            'expand' => isset($params['expand']) ? $params['expand'] : '',
         ];
 
         return new OrdersResponse(
             $this->client->get('/orders', $parsedParams)
         );
+    }
+
+    public function getOrder($params = [])
+    {
+        $id = $params['id'];
+        $parsedParams = [
+            'expand' => isset($params['maxResults']) ? $params['maxResults'] : null,
+        ];
+
+        return new OrdersResponse(
+            $this->client->get("/orders/{$id}", $parsedParams)
+        );
+    }
+
+    public function createPayment($rawPayload)
+    {
+        $request = new PaymentRequest($rawPayload);
+        return new PaymentResponse(
+            $this->client->post('/payments', $request->toRequest())
+        );
+    }
+
+    public function capture($rawPayload)
+    {
+        return $this->createPayment($rawPayload);
+    }
+
+    public function createRefund($rawPayload)
+    {
+        $request = new RefundRequest($rawPayload);
+        return new RefundResponse(
+            $this->client->post('/refunds', $request->toRequest())
+        );
+    }
+
+    public function refund($rawPayload)
+    {
+        return $this->createRefund($rawPayload);
     }
 }
