@@ -5,7 +5,7 @@ namespace Smartpay\Requests;
 use Smartpay\Errors\InvalidRequestPayloadError;
 
 /**
- * Class Smartpay.
+ * Class CheckoutSession.
  */
 class CheckoutSession
 {
@@ -52,7 +52,6 @@ class CheckoutSession
 			'amount' => $this->getOrNull($this->rawPayload, 'amount'),
 			'currency' => $this->currency,
 			'captureMethod' => $this->getOrNull($this->rawPayload, 'captureMethod'),
-			'confirmationMethod' => $this->getOrNull($this->rawPayload, 'confirmationMethod'),
 			'shippingInfo' => $shippingInfo,
 			'items' => $this->normalizeItemData($this->getOrNull($this->rawPayload, 'items')),
 			'reference' => $this->getOrNull($this->rawPayload, 'reference'),

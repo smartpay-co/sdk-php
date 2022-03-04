@@ -75,7 +75,6 @@ final class CheckoutSessionTest extends TestCase
             "metadata" => [],
             "amount" => 350,
             "captureMethod" => null,
-            "confirmationMethod" => null,
             "currency" => "JPY",
             "items" => [[
                 "description" => null,
