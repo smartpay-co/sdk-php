@@ -7,10 +7,8 @@ use Smartpay\Smartpay;
 use Smartpay\Requests\CheckoutSession as CheckoutSessionRequest;
 use Smartpay\Responses\CheckoutSession as CheckoutSessionResponse;
 use Smartpay\Requests\Payment as PaymentRequest;
-use Smartpay\Responses\Payment as PaymentResponse;
 use Smartpay\Requests\Refund as RefundRequest;
-use Smartpay\Responses\Refund as RefundResponse;
-use Smartpay\Responses\Order as OrdersResponse;
+use Smartpay\Responses\Base as BaseResponse;
 
 /**
  * Class Smartpay.
@@ -43,7 +41,7 @@ class Api
             'expand' => isset($params['expand']) ? $params['expand'] : '',
         ];
 
-        return new OrdersResponse(
+        return new BaseResponse(
             $this->client->get('/orders', $parsedParams)
         );
     }
@@ -55,7 +53,7 @@ class Api
             'expand' => isset($params['maxResults']) ? $params['maxResults'] : null,
         ];
 
-        return new OrdersResponse(
+        return new BaseResponse(
             $this->client->get("/orders/{$id}", $parsedParams)
         );
     }
@@ -63,7 +61,7 @@ class Api
     public function createPayment($rawPayload)
     {
         $request = new PaymentRequest($rawPayload);
-        return new PaymentResponse(
+        return new BaseResponse(
             $this->client->post('/payments', $request->toRequest())
         );
     }
@@ -76,7 +74,7 @@ class Api
     public function createRefund($rawPayload)
     {
         $request = new RefundRequest($rawPayload);
-        return new RefundResponse(
+        return new BaseResponse(
             $this->client->post('/refunds', $request->toRequest())
         );
     }

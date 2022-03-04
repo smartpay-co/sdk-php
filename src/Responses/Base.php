@@ -4,7 +4,7 @@ namespace Smartpay\Responses;
 
 use Smartpay\Smartpay;
 
-class Payment
+class Base
 {
     private $guzzleResponse;
 
