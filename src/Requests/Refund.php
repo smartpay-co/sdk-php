@@ -9,7 +9,7 @@ use Smartpay\Errors\InvalidRequestPayloadError;
  */
 class Refund
 {
-	const REQUIREMENT_KEY_NAME = ['payment', 'amount', 'currency'];
+	const REQUIREMENT_KEY_NAME = ['payment', 'amount', 'currency', 'reason'];
 
 	private $rawPayload;
 

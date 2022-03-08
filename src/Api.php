@@ -17,10 +17,13 @@ class Api
 {
     private $client;
 
-    public function __construct($publicKey, $secretKey, $client = Null)
+    public function __construct($secretKey, $publicKey = Null, $client = Null)
     {
-        Smartpay::setPublicKey($publicKey);
         Smartpay::setSecretKey($secretKey);
+
+        if ($publicKey) {
+            Smartpay::setPublicKey($publicKey);
+        }
 
         $this->client = is_null($client) ? new Client() : $client;
     }
@@ -50,7 +53,7 @@ class Api
     {
         $id = $params['id'];
         $parsedParams = [
-            'expand' => isset($params['maxResults']) ? $params['maxResults'] : null,
+            'expand' => isset($params['expand']) ? $params['expand'] : null,
         ];
 
         return new BaseResponse(

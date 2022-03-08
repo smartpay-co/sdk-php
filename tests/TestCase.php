@@ -6,9 +6,6 @@ use Smartpay\Smartpay;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
-    const PUBLIC_KEY = 'pk_test_7smSiNAbAwsI2HKQE9e3hA';
-    const SECRET_KEY = 'sk_test_KTGPODEMjGTJByn1pu8psb';
-
     public function setUp()
     {
         Smartpay::reset();

@@ -28,7 +28,7 @@ final class ApiTest extends TestCase
         $handlerStack = HandlerStack::create($mock);
         $client = new Client(new GuzzleClient(['handler' => $handlerStack]));
 
-        $api = new Api('pk_test_mock', 'sk_test_mock', $client);
+        $api = new Api('sk_test_mock', 'pk_test_mock', $client);
         $this->assertSame([], $api->checkoutSession($validPayload)->asJson());
     }
 
@@ -40,7 +40,7 @@ final class ApiTest extends TestCase
         $handlerStack = HandlerStack::create($mock);
         $client = new Client(new GuzzleClient(['handler' => $handlerStack]));
 
-        $api = new Api('pk_test_mock', 'sk_test_mock', $client);
+        $api = new Api('sk_test_mock', 'pk_test_mock', $client);
         $this->assertSame([], $api->getOrders()->asJson());
     }
 }

@@ -30,8 +30,8 @@ class Smartpay
         self::$apiUrl = self::DEFAULT_API_URL;
         self::$checkoutUrl = self::DEFAULT_CHECKOUT_URL;
         self::$postTimeout = self::DEFAULT_POST_TIMEOUT;
-        self::$publicKey = null;
-        self::$secretKey = null;
+        self::$publicKey = getenv('SMARTPAY_API_PREFIX') ? getenv('SMARTPAY_API_PREFIX') : null;
+        self::$secretKey = getenv('SMARTPAY_CHECKOUT_URL') ? getenv('SMARTPAY_CHECKOUT_URL') : null;
     }
 
     public static function setApiUrl($apiUrl)
