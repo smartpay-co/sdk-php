@@ -28,14 +28,14 @@ class Client
 
 	public function get($path, $rawParams)
 	{
-		$params = array_merge($rawParams, $this->defaultPayload());
+		$params = array_merge($rawParams, $this->defaultParams());
 
 		return $this->client->get(Smartpay::getApiUrl() . $path, ['query' => $params, 'headers' => $this->headers()]);
 	}
 
 	public function post($path, $payload)
 	{
-		$params = $this->defaultPayload();
+		$params = $this->defaultParams();
 
 		return $this->client->post(Smartpay::getApiUrl() . $path, ['json' => $payload, 'query' => $params, 'headers' => $this->headers()]);
 	}
@@ -49,7 +49,7 @@ class Client
 		];
 	}
 
-	private function defaultPayload()
+	private function defaultParams()
 	{
 		return [
 			'dev-lang' => Smartpay::DEV_LANG,

@@ -72,10 +72,9 @@ final class CheckoutSessionTest extends TestCase
                 "reference" => null
             ],
             "reference" => "order_ref_1234567",
-            "metadata" => [],
+            "metadata" => null,
             "amount" => 350,
             "captureMethod" => null,
-            "confirmationMethod" => null,
             "currency" => "JPY",
             "items" => [[
                 "description" => null,

@@ -19,12 +19,11 @@ final class CheckoutSessionTest extends TestCase
     {
         Smartpay::setPublicKey('pk_test_1234');
         $response = new CheckoutSession(
-            new Response(200, ['X-Foo' => 'Bar'], '{"id": "checkout_test_oTQpCvZzZ52UvKbrN5i4B8"}')
+            new Response(200, ['X-Foo' => 'Bar'], '{"id": "checkout_test_oTQpCvZzZ52UvKbrN5i4B8", "url": "https://checkout.smartpay.co/checkout_test_oTQpCvZzZ52UvKbrN5i4B8"}')
         );
 
-        $this->assertSame(
-            'https://checkout.smartpay.co/login?session-id=checkout_test_oTQpCvZzZ52UvKbrN5i4B8&public-key=pk_test_1234',
-            $response->redirectUrl()
+        $this->assertTrue(
+            stripos($response->redirectUrl(), 'checkout_test_oTQpCvZzZ52UvKbrN5i4B8') > 0
         );
     }
 
@@ -32,12 +31,11 @@ final class CheckoutSessionTest extends TestCase
     {
         Smartpay::setPublicKey('pk_test_1234');
         $response = new CheckoutSession(
-            new Response(200, ['X-Foo' => 'Bar'], '{"id": "checkout_test_oTQpCvZzZ52UvKbrN5i4B8", "metadata": {"__promotion_code__": "ABCD"}}')
+            new Response(200, ['X-Foo' => 'Bar'], '{"id": "checkout_test_oTQpCvZzZ52UvKbrN5i4B8", "url": "https://checkout.smartpay.co/checkout_test_oTQpCvZzZ52UvKbrN5i4B8"}')
         );
 
-        $this->assertSame(
-            'https://checkout.smartpay.co/login?session-id=checkout_test_oTQpCvZzZ52UvKbrN5i4B8&public-key=pk_test_1234&promotion-code=ABCD',
-            $response->redirectUrl()
+        $this->assertTrue(
+            stripos($response->redirectUrl(['promotionCode' => 'ABCD']), 'ABCD') > 0
         );
     }
 }

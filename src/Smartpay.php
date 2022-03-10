@@ -15,6 +15,9 @@ class Smartpay
     const DEFAULT_POST_TIMEOUT = 30;
     const DEFAULT_PAGE_COUNT = 20;
 
+    const REJECT_REQUEST_BY_CUSTOMER = 'requested_by_customer';
+    const REJECT_FRAUDULENT = 'fraudulent';
+
     public static $apiUrl = self::DEFAULT_API_URL;
     public static $checkoutUrl = self::DEFAULT_CHECKOUT_URL;
     public static $postTimeout = self::DEFAULT_POST_TIMEOUT;
@@ -27,8 +30,8 @@ class Smartpay
         self::$apiUrl = self::DEFAULT_API_URL;
         self::$checkoutUrl = self::DEFAULT_CHECKOUT_URL;
         self::$postTimeout = self::DEFAULT_POST_TIMEOUT;
-        self::$publicKey = null;
-        self::$secretKey = null;
+        self::$publicKey = getenv('SMARTPAY_API_PREFIX') ? getenv('SMARTPAY_API_PREFIX') : null;
+        self::$secretKey = getenv('SMARTPAY_CHECKOUT_URL') ? getenv('SMARTPAY_CHECKOUT_URL') : null;
     }
 
     public static function setApiUrl($apiUrl)
