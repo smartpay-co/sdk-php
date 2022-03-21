@@ -40,6 +40,13 @@ class Client
 		return $this->client->post(Smartpay::getApiUrl() . $path, ['json' => $payload, 'query' => $params, 'headers' => $this->headers()]);
 	}
 
+	public function put($path, $payload)
+	{
+		$params = $this->defaultParams();
+
+		return $this->client->post(Smartpay::getApiUrl() . $path, ['json' => $payload, 'query' => $params, 'headers' => $this->headers()]);
+	}
+
 	private function headers()
 	{
 		return [
