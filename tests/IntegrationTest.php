@@ -110,13 +110,15 @@ final class OrderLifecycleTest extends TestCase
             'amount' => $PAYMENT_AMOUNT,
             'currency' => 'JPY',
             'reference' => '12345',
+            'cancel_method' => 'manual',
         ]);
 
         $payment2Response = $api->capture([
             'order' => $orderId,
-            'amount' => $PAYMENT_AMOUNT,
+            'amount' => $PAYMENT_AMOUNT + 1,
             'currency' => 'JPY',
             'reference' => '12345',
+            'cancel_method' => 'manual',
         ]);
 
         $payment1 = $payment1Response->asJson();
@@ -124,7 +126,13 @@ final class OrderLifecycleTest extends TestCase
 
         static::assertArrayHasKey('id', $payment1);
         static::assertArrayHasKey('id', $payment2);
-        static::assertSame($payment2['amount'], $PAYMENT_AMOUNT);
+        static::assertEquals($payment2['amount'], $PAYMENT_AMOUNT + 1);
+
+        $retrivedPayment2Response = $api->getPAyment(['id' => $payment2['id']]);
+        $retrivedPayment2 = $retrivedPayment2Response->asJson();
+
+        static::assertSame($retrivedPayment2['id'], $payment2['id']);
+        static::assertEquals($retrivedPayment2['amount'],  $PAYMENT_AMOUNT + 1);
 
         $orderResponse = $api->getOrder([
             'id' => $orderId,
@@ -145,7 +153,7 @@ final class OrderLifecycleTest extends TestCase
 
         $refund2Response = $api->refund([
             'payment' => $refundablePayment,
-            'amount' => $REFUND_AMOUNT,
+            'amount' => $REFUND_AMOUNT + 1,
             'currency' => 'JPY',
             'reference' => '12345',
             'reason' => Smartpay::REJECT_REQUEST_BY_CUSTOMER,
@@ -156,6 +164,6 @@ final class OrderLifecycleTest extends TestCase
 
         static::assertArrayHasKey('id', $refund1);
         static::assertArrayHasKey('id', $refund2);
-        static::assertSame($refund2['amount'], $REFUND_AMOUNT);
+        static::assertSame($refund2['amount'], $REFUND_AMOUNT + 1);
     }
 }
