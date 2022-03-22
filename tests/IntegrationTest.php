@@ -7,7 +7,6 @@ use Tests\TestCase;
 use Smartpay\Smartpay;
 
 use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Psr7\Request;
 
 final class OrderLifecycleTest extends TestCase
 {
@@ -66,6 +65,8 @@ final class OrderLifecycleTest extends TestCase
 
         $checkoutSession = $checkoutSessionResponse->asJson();
 
+        print_r($checkoutSession);
+
         static::assertArrayHasKey('id', $checkoutSession);
 
         $orderId = $checkoutSession['order']['id'];
@@ -93,7 +94,7 @@ final class OrderLifecycleTest extends TestCase
             "paymentMethod" => "pm_test_visaApproved",
             "paymentPlan" => "pay_in_three"
         ];
-        $authorizationResponse = $client->post('/orders/' . $orderId . '/authorizations', [
+        $client->post('/orders/' . $orderId . '/authorizations', [
             'headers' => [
                 'Authorization' => 'Bearer ' . strval($accessToken),
                 'Accept' => 'application/json',
@@ -101,7 +102,6 @@ final class OrderLifecycleTest extends TestCase
             ],
             'json' => $authorizationPayload
         ]);
-        // $authorizationResponseData = json_decode(strval($authorizationResponse->getBody()), true);
 
         $PAYMENT_AMOUNT = 50;
 

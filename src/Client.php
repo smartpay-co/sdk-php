@@ -5,7 +5,16 @@ namespace Smartpay;
 use Smartpay\Smartpay;
 
 use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\HandlerStack;
+use GuzzleRetry\GuzzleRetryMiddleware;
+
+function nonce()
+{
+	$factory = new \RandomLib\Factory();
+	$generator = $factory->getGenerator(new \SecurityLib\Strength(\SecurityLib\Strength::MEDIUM));
+
+	return $generator->generateString(32, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+}
 
 /**
  * Class Smartpay.
@@ -19,9 +28,15 @@ class Client
 		$this->client = $client;
 
 		if (is_null($client)) {
+			$stack = HandlerStack::create();
+			$stack->push(GuzzleRetryMiddleware::factory());
+
 			$this->client = new GuzzleClient([
+				'handler' => $stack,
 				'base_uri' => Smartpay::getApiUrl(),
 				'timeout'  => Smartpay::getPostTimeout(),
+				'max_retry_attempts' => 5,
+				'retry_on_status' => [500, 502, 503, 504]
 			]);
 		}
 	}
@@ -36,15 +51,19 @@ class Client
 	public function post($path, $payload)
 	{
 		$params = $this->defaultParams();
+		$headers = $this->headers();
+		$headers['Idempotency-Key'] = nonce();
 
-		return $this->client->post(Smartpay::getApiUrl() . $path, ['json' => $payload, 'query' => $params, 'headers' => $this->headers()]);
+		return $this->client->post(Smartpay::getApiUrl() . $path, ['json' => $payload, 'query' => $params, 'headers' => $headers]);
 	}
 
 	public function put($path, $payload)
 	{
 		$params = $this->defaultParams();
+		$headers = $this->headers();
+		$headers['Idempotency-Key'] = nonce();
 
-		return $this->client->post(Smartpay::getApiUrl() . $path, ['json' => $payload, 'query' => $params, 'headers' => $this->headers()]);
+		return $this->client->post(Smartpay::getApiUrl() . $path, ['json' => $payload, 'query' => $params, 'headers' => $headers]);
 	}
 
 	private function headers()
