@@ -35,7 +35,7 @@ class Client
 				'handler' => $stack,
 				'base_uri' => Smartpay::getApiUrl(),
 				'timeout'  => Smartpay::getPostTimeout(),
-				'max_retry_attempts' => 5,
+				'max_retry_attempts' => 1,
 				'retry_on_status' => [500, 502, 503, 504]
 			]);
 		}
