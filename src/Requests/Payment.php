@@ -38,7 +38,7 @@ class Payment
 			'order' => $this->getOrNull($this->rawPayload, 'order'),
 			'amount' => $this->getOrNull($this->rawPayload, 'amount'),
 			'currency' => $this->getOrNull($this->rawPayload, 'currency'),
-			'cancelMethod' => $this->getOrNull($this->rawPayload, 'cancel_method'),
+			'cancelRemainder' => $this->getOrNull($this->rawPayload, 'cancelRemainder'),
 			'reference' => $this->getOrNull($this->rawPayload, 'reference'),
 			'description' => $this->getOrNull($this->rawPayload, 'description'),
 			'metadata' => $metadata,

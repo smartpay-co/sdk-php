@@ -110,7 +110,7 @@ final class OrderLifecycleTest extends TestCase
             'amount' => $PAYMENT_AMOUNT,
             'currency' => 'JPY',
             'reference' => '12345',
-            'cancel_method' => 'manual',
+            'cancelRemainder' => 'manual',
         ]);
 
         $payment2Response = $api->capture([
@@ -118,7 +118,7 @@ final class OrderLifecycleTest extends TestCase
             'amount' => $PAYMENT_AMOUNT + 1,
             'currency' => 'JPY',
             'reference' => '12345',
-            'cancel_method' => 'manual',
+            'cancelRemainder' => 'manual',
         ]);
 
         $payment1 = $payment1Response->asJson();
