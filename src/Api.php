@@ -61,11 +61,33 @@ class Api
         );
     }
 
+    public function cancelOrder($params = [])
+    {
+        $id = $params['id'];
+        return new BaseResponse(
+            $this->client->put("/orders/{$id}/cancellation", [])
+        );
+    }
+
+
     public function createPayment($rawPayload)
     {
         $request = new PaymentRequest($rawPayload);
         return new BaseResponse(
             $this->client->post('/payments', $request->toRequest())
+        );
+    }
+
+
+    public function getPayment($params = [])
+    {
+        $id = $params['id'];
+        $parsedParams = [
+            'expand' => isset($params['expand']) ? $params['expand'] : null,
+        ];
+
+        return new BaseResponse(
+            $this->client->get("/payments/{$id}", $parsedParams)
         );
     }
 
@@ -85,5 +107,18 @@ class Api
     public function refund($rawPayload)
     {
         return $this->createRefund($rawPayload);
+    }
+
+
+    public function getRefund($params = [])
+    {
+        $id = $params['id'];
+        $parsedParams = [
+            'expand' => isset($params['expand']) ? $params['expand'] : null,
+        ];
+
+        return new BaseResponse(
+            $this->client->get("/refunds/{$id}", $parsedParams)
+        );
     }
 }
