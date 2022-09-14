@@ -144,25 +144,26 @@ class CheckoutSession
 
 		$result = [];
 		for ($i = 0; $i < count($data); ++$i) {
-			array_push($result, [
-				'quantity' => $this->getOrNull($data[$i], 'quantity'),
-				'label' => $this->getOrNull($data[$i], 'label'),
-				'brand' => $this->getOrNull($data[$i], 'brand'),
-				'name' => $this->getOrNull($data[$i], 'name'),
-				'amount' => $this->getOrNull($data[$i], 'amount'),
-				'currency' => $this->getOrNull($data[$i], 'currency'),
-				'categories' => $this->getOrNull($data[$i], 'categories'),
-				'gtin' => $this->getOrNull($data[$i], 'gtin'),
-				'images' => $this->getOrNull($data[$i], 'images'),
-				'reference' => $this->getOrNull($data[$i], 'reference'),
-				'url' => $this->getOrNull($data[$i], 'url'),
-				'description' => $this->getOrNull($data[$i], 'description'),
-				'priceDescription' => $this->getOrNull($data[$i], 'priceDescription'),
-				'productDescription' => $this->getOrNull($data[$i], 'productDescription'),
-				'metadata' => $this->getOrNull($data[$i], 'metadata'),
-				'priceMetadata' => $this->getOrNull($data[$i], 'priceMetadata'),
-				'productMetadata' => $this->getOrNull($data[$i], 'productMetadata')
-			]);
+			$result[] = [
+                'quantity' => $this->getOrNull($data[$i], 'quantity'),
+                'label' => $this->getOrNull($data[$i], 'label'),
+                'brand' => $this->getOrNull($data[$i], 'brand'),
+                'name' => $this->getOrNull($data[$i], 'name'),
+                'amount' => $this->getOrNull($data[$i], 'amount'),
+                'currency' => $this->getOrNull($data[$i], 'currency'),
+                'categories' => $this->getOrNull($data[$i], 'categories'),
+                'gtin' => $this->getOrNull($data[$i], 'gtin'),
+                'images' => $this->getOrNull($data[$i], 'images'),
+                'reference' => $this->getOrNull($data[$i], 'reference'),
+                'url' => $this->getOrNull($data[$i], 'url'),
+                'description' => $this->getOrNull($data[$i], 'description'),
+                'priceDescription' => $this->getOrNull($data[$i], 'priceDescription'),
+                'productDescription' => $this->getOrNull($data[$i], 'productDescription'),
+                'metadata' => $this->getOrNull($data[$i], 'metadata'),
+                'priceMetadata' => $this->getOrNull($data[$i], 'priceMetadata'),
+                'productMetadata' => $this->getOrNull($data[$i], 'productMetadata'),
+                'kind' => $this->getOrNull($data[$i], 'kind')
+            ];
 		}
 
 		return $result;
