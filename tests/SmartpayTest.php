@@ -41,6 +41,7 @@ final class SmartpayTest extends TestCase
 
     public function testPublicKeyAccessors()
     {
+        Smartpay::setPublicKey(Null);
         static::assertNull(Smartpay::getPublicKey());
 
         Smartpay::setPublicKey('pk_test_123');
@@ -49,6 +50,7 @@ final class SmartpayTest extends TestCase
 
     public function testSecretKeyAccessors()
     {
+        Smartpay::setSecretKey(Null);
         static::assertNull(Smartpay::getSecretKey());
 
         Smartpay::setSecretKey('sk_test_123');
