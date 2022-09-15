@@ -46,12 +46,26 @@ You can find the description and requirement for request payload in [API Documen
 
 ```php
 $payload = [
-  'items' => [[
-    'name' => 'オリジナルス STAN SMITH',
-    'amount' => 250,
-    'currency' => 'JPY',
-    'quantity' => 1,
-  ]],
+  'items' => [
+    [
+      'name' => 'オリジナルス STAN SMITH',
+      'amount' => 1000,
+      'currency' => 'JPY',
+      'quantity' => 1,
+    ],
+    [
+      'currency' => 'JPY',
+      'amount' => 500,
+      'name' => 'Merchant special discount',
+      'kind' => 'discount'
+    ],
+    [
+      'currency' => 'JPY',
+      'amount' => 100,
+      'name' => 'explicit taxes',
+      'kind' => 'tax'
+    ]
+  ],
   'customer' => [
     'accountAge' => 20,
     'email' => 'merchant-support@smartpay.co',
