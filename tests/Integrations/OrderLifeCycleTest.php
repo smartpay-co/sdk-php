@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Smartpay;
+namespace Tests\Integrations;
 
 use Tests\TestCase;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Requests;
 
 use Tests\TestCase;
 use Smartpay\Requests\CheckoutSession;
