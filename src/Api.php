@@ -137,21 +137,47 @@ class Api
 
     public function getWebhookEndpoint($params = [])
     {
+        $id = $params['id'];
 
+        return new BaseResponse(
+            $this->client->get("/webhook-endpoints/{$id}")
+        );
     }
 
     public function getWebhookEndpoints($params = [])
     {
+        $parsedParams = [
+            'pageToken' => isset($params['pageToken']) ? $params['pageToken'] : null,
+            'maxResults' => isset($params['maxResults']) ? $params['maxResults'] : null,
+        ];
 
+        return new BaseResponse(
+            $this->client->get('/webhook-endpoints', $parsedParams)
+        );
     }
 
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
     public function updateWebhookEndpoint($rawPayload)
     {
+        $id = $rawPayload['id'];
+        unset($rawPayload['id']);
+        if (array_key_exists('eventSubscriptions', $rawPayload)) {
+            WebhookEndpointRequest::validateEventSubscriptions($rawPayload['eventSubscriptions']);
+        }
 
+        return new BaseResponse(
+            $this->client->patch("/webhook-endpoints/{$id}", $rawPayload)
+        );
     }
 
-    public function deleteWebhookEndpoint($rawPayload)
+    public function deleteWebhookEndpoint($params)
     {
+        $id = $params['id'];
 
+        return new BaseResponse(
+            $this->client->delete("/webhook-endpoints/{$id}")
+        );
     }
 }

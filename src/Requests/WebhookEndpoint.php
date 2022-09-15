@@ -45,11 +45,7 @@ class WebhookEndpoint
         }
 
         if (array_key_exists('eventSubscriptions', $this->rawPayload)) {
-            foreach ($this->rawPayload['eventSubscriptions'] as $eventSubscription) {
-                if (!in_array($eventSubscription, self::ALLOWED_EVENT_SUBSCRIPTIONS_VALUES)) {
-                    throw new InvalidRequestPayloadError('Invalid eventSubscription: ' . $eventSubscription);
-                }
-            }
+            self::validateEventSubscriptions($this->rawPayload['eventSubscriptions']);
         }
 
         return $this->normalize();
@@ -72,5 +68,17 @@ class WebhookEndpoint
             $value = $array[$key];
         }
         return $value;
+    }
+
+    /**
+     * @throws InvalidRequestPayloadError
+     */
+    public static function validateEventSubscriptions($eventSubscriptions)
+    {
+        foreach ($eventSubscriptions as $eventSubscription) {
+            if (!in_array($eventSubscription, self::ALLOWED_EVENT_SUBSCRIPTIONS_VALUES)) {
+                throw new InvalidRequestPayloadError('Invalid eventSubscription: ' . $eventSubscription);
+            }
+        }
     }
 }
