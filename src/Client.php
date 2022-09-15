@@ -63,7 +63,7 @@ class Client
 		$headers = $this->headers();
 		$headers['Idempotency-Key'] = nonce();
 
-		return $this->client->post(Smartpay::getApiUrl() . $path, ['json' => $payload, 'query' => $params, 'headers' => $headers]);
+		return $this->client->put(Smartpay::getApiUrl() . $path, ['json' => $payload, 'query' => $params, 'headers' => $headers]);
 	}
 
 	private function headers()
