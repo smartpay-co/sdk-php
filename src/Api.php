@@ -8,6 +8,7 @@ use Smartpay\Requests\CheckoutSession as CheckoutSessionRequest;
 use Smartpay\Responses\CheckoutSession as CheckoutSessionResponse;
 use Smartpay\Requests\Payment as PaymentRequest;
 use Smartpay\Requests\Refund as RefundRequest;
+use Smartpay\Requests\WebhookEndpoint as WebhookEndpointRequest;
 use Smartpay\Responses\Base as BaseResponse;
 
 /**
@@ -120,5 +121,37 @@ class Api
         return new BaseResponse(
             $this->client->get("/refunds/{$id}", $parsedParams)
         );
+    }
+
+    /**
+     * Webhook Endpoint
+     */
+
+    public function createWebhookEndpoint($rawPayload)
+    {
+        $request = new WebhookEndpointRequest($rawPayload);
+        return new BaseResponse(
+            $this->client->post('/webhook-endpoints', $request->toRequest())
+        );
+    }
+
+    public function getWebhookEndpoint($params = [])
+    {
+
+    }
+
+    public function getWebhookEndpoints($params = [])
+    {
+
+    }
+
+    public function updateWebhookEndpoint($rawPayload)
+    {
+
+    }
+
+    public function deleteWebhookEndpoint($rawPayload)
+    {
+
     }
 }
