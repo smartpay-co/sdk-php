@@ -4,7 +4,7 @@ namespace Tests;
 
 use Smartpay\Smartpay;
 
-class TestCase extends \PHPUnit\Framework\TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

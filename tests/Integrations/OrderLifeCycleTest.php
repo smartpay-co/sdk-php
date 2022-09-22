@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Smartpay;
+namespace Tests\Integrations;
 
 use Tests\TestCase;
 
@@ -64,8 +64,6 @@ final class OrderLifecycleTest extends TestCase
         ]);
 
         $checkoutSession = $checkoutSessionResponse->asJson();
-
-        print_r($checkoutSession);
 
         static::assertArrayHasKey('id', $checkoutSession);
 
@@ -165,5 +163,81 @@ final class OrderLifecycleTest extends TestCase
         static::assertArrayHasKey('id', $refund1);
         static::assertArrayHasKey('id', $refund2);
         static::assertSame($refund2['amount'], $REFUND_AMOUNT + 1);
+    }
+
+    public function testLineItems() {
+        $api = new \Smartpay\Api(getenv('SMARTPAY_SECRET_KEY'), getenv('SMARTPAY_PUBLIC_KEY'));
+
+        $checkoutSessionResponse = $api->checkoutSession([
+            "amount" => 601,
+            "currency" => "JPY",
+            "successUrl" => "https://docs.smartpay.co/en/example-pages/checkout-successful/",
+            "cancelUrl" => "https://docs.smartpay.co/en/example-pages/checkout-canceled/",
+            "captureMethod" => "automatic",
+            "items" => [
+                [
+                    "currency" => "JPY",
+                    "amount" => 500,
+                    "name" => "Merchant special discount",
+                    "kind" => "discount"
+                ],
+                [
+                    "currency" => "JPY",
+                    "amount" => 100,
+                    "name" => "explicit taxes",
+                    "kind" => "tax"
+                ],
+                [
+                    "currency" => "JPY",
+                    "amount" => 1000,
+                    "name" => "ice cream",
+                    "quantity" => 1
+                ]
+            ],
+            "customerInfo" => [
+                "emailAddress" => "john@smartpay.co",
+                "firstName" => "John",
+                "lastName" => "Doe",
+                "firstNameKana" => "ジョン",
+                "lastNameKana" => "ドエ",
+                "phoneNumber" => "+818000000000",
+                "dateOfBirth" => "2000-01-01",
+                "legalGender" => "male",
+                "address" => [
+                    "line1" => "",
+                    "line2" => "800",
+                    "locality" => "世田谷区",
+                    "administrativeArea" => "東京都",
+                    "postalCode" => "155-0031",
+                    "country" => "jp"
+                ],
+                "accountAge" => 30
+            ],
+            "shippingInfo" => [
+                "address" => [
+                    "line1" => "1-2-3",
+                    "line2" => "12",
+                    "locality" => "locality",
+                    "postalCode" => "12345678",
+                    "country" => "jp"
+                ],
+                "feeAmount" => 1,
+                "feeCurrency" => "jpy"
+            ]
+        ]);
+
+        $checkoutSession = $checkoutSessionResponse->asJson();
+
+        static::assertArrayHasKey('id', $checkoutSession);
+
+        $orderId = $checkoutSession['order']['id'];
+        $orderResponse = $api->getOrder([
+            'id' => $orderId,
+            'expand' => 'all'
+        ]);
+        $order = $orderResponse->asJson();
+        static::assertArrayHasKey('kind', $order['lineItems'][0]);
+        static::assertArrayHasKey('kind', $order['lineItems'][1]);
+        static::assertArrayHasKey('kind', $order['lineItems'][2]);
     }
 }
