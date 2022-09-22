@@ -163,6 +163,11 @@ final class OrderLifecycleTest extends TestCase
         static::assertArrayHasKey('id', $refund1);
         static::assertArrayHasKey('id', $refund2);
         static::assertSame($refund2['amount'], $REFUND_AMOUNT + 1);
+
+
+
+        $cancelOrder = $api->cancelOrder(['id' => $orderId])->asJson();
+        static::assertSame($cancelOrder['status'], 'succeeded');
     }
 
     public function testLineItems() {

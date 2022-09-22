@@ -41,7 +41,7 @@ class Client
 		}
 	}
 
-	public function get($path, $rawParams)
+	public function get($path, $rawParams = [])
 	{
 		$params = array_merge($rawParams, $this->defaultParams());
 
@@ -63,8 +63,26 @@ class Client
 		$headers = $this->headers();
 		$headers['Idempotency-Key'] = nonce();
 
-		return $this->client->post(Smartpay::getApiUrl() . $path, ['json' => $payload, 'query' => $params, 'headers' => $headers]);
+		return $this->client->put(Smartpay::getApiUrl() . $path, ['json' => $payload, 'query' => $params, 'headers' => $headers]);
 	}
+
+    public function patch($path, $payload = [])
+    {
+        $params = $this->defaultParams();
+        $headers = $this->headers();
+        $headers['Idempotency-Key'] = nonce();
+
+        return $this->client->patch(Smartpay::getApiUrl() . $path, ['json' => $payload, 'query' => $params, 'headers' => $headers]);
+    }
+
+    public function delete($path, $payload = [])
+    {
+        $params = $this->defaultParams();
+        $headers = $this->headers();
+        $headers['Idempotency-Key'] = nonce();
+
+        return $this->client->delete(Smartpay::getApiUrl() . $path, ['json' => $payload, 'query' => $params, 'headers' => $headers]);
+    }
 
 	private function headers()
 	{

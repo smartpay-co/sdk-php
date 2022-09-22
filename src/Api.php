@@ -8,6 +8,7 @@ use Smartpay\Requests\CheckoutSession as CheckoutSessionRequest;
 use Smartpay\Responses\CheckoutSession as CheckoutSessionResponse;
 use Smartpay\Requests\Payment as PaymentRequest;
 use Smartpay\Requests\Refund as RefundRequest;
+use Smartpay\Requests\WebhookEndpoint as WebhookEndpointRequest;
 use Smartpay\Responses\Base as BaseResponse;
 
 /**
@@ -119,6 +120,64 @@ class Api
 
         return new BaseResponse(
             $this->client->get("/refunds/{$id}", $parsedParams)
+        );
+    }
+
+    /**
+     * Webhook Endpoint
+     */
+
+    public function createWebhookEndpoint($rawPayload)
+    {
+        $request = new WebhookEndpointRequest($rawPayload);
+        return new BaseResponse(
+            $this->client->post('/webhook-endpoints', $request->toRequest())
+        );
+    }
+
+    public function getWebhookEndpoint($params = [])
+    {
+        $id = $params['id'];
+
+        return new BaseResponse(
+            $this->client->get("/webhook-endpoints/{$id}")
+        );
+    }
+
+    public function getWebhookEndpoints($params = [])
+    {
+        $parsedParams = [
+            'pageToken' => isset($params['pageToken']) ? $params['pageToken'] : null,
+            'maxResults' => isset($params['maxResults']) ? $params['maxResults'] : null,
+        ];
+
+        return new BaseResponse(
+            $this->client->get('/webhook-endpoints', $parsedParams)
+        );
+    }
+
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
+    public function updateWebhookEndpoint($rawPayload)
+    {
+        $id = $rawPayload['id'];
+        unset($rawPayload['id']);
+        if (array_key_exists('eventSubscriptions', $rawPayload)) {
+            WebhookEndpointRequest::validateEventSubscriptions($rawPayload['eventSubscriptions']);
+        }
+
+        return new BaseResponse(
+            $this->client->patch("/webhook-endpoints/{$id}", $rawPayload)
+        );
+    }
+
+    public function deleteWebhookEndpoint($params)
+    {
+        $id = $params['id'];
+
+        return new BaseResponse(
+            $this->client->delete("/webhook-endpoints/{$id}")
         );
     }
 }
