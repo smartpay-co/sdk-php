@@ -1,7 +1,7 @@
 {
   "name": "smartpay-co/sdk-php",
   "description": "The Smartpay PHP SDK offers easy access to Smartpay API from applications written in PHP.",
-  "version": "v0.5.0",
+  "version": "v0.5.1",
   "keywords": [
     "smartpay"
   ],
