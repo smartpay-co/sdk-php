@@ -180,4 +180,54 @@ class Api
             $this->client->delete("/webhook-endpoints/{$id}")
         );
     }
+
+    /**
+     * Token
+     */
+
+    public function getToken($params)
+    {
+        $id = $params['id'];
+
+        return new BaseResponse(
+            $this->client->get("/tokens/{$id}")
+        );
+    }
+
+    public function deleteToken($params)
+    {
+        $id = $params['id'];
+
+        return new BaseResponse(
+            $this->client->delete("/tokens/{$id}")
+        );
+    }
+
+    public function getTokens($params = [])
+    {
+        $parsedParams = [
+            'pageToken' => isset($params['pageToken']) ? $params['pageToken'] : null,
+            'maxResults' => isset($params['maxResults']) ? $params['maxResults'] : null,
+        ];
+
+        return new BaseResponse(
+            $this->client->get('/tokens', $parsedParams)
+        );
+    }
+
+    public function enableToken($params)
+    {
+        $id = $params['id'];
+        return new BaseResponse(
+            $this->client->put("/tokens/{$id}/enable", [])
+        );
+    }
+
+    public function disableToken($params)
+    {
+        $id = $params['id'];
+        return new BaseResponse(
+            $this->client->put("/tokens/{$id}/disable", [])
+        );
+    }
 }
