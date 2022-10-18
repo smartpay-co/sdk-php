@@ -12,11 +12,8 @@ class CheckoutSession
 	const REQUIREMENT_KEY_NAME = ['successUrl', 'cancelUrl', 'customerInfo', 'currency', 'items'];
 	const CAN_FALLBACK_KEYS = ['customerInfo'];
 
-	private $rawPayload;
-
-	private $item = [];
-	private $currency = '';
-	private $amount = 0.0;
+	protected $rawPayload;
+    protected $currency;
 
 	public function __construct($rawPayload)
 	{
@@ -33,14 +30,12 @@ class CheckoutSession
 			}
 		}
 
-		$this->normalizePayload = $this->normalize();
-		return $this->normalizePayload;
+		return $this->normalize();
 	}
 
-	private function normalize()
+    protected function normalize()
 	{
-		$this->currency = $this->getOrNull($this->rawPayload, 'currency');
-
+        $this->currency = $this->getOrNull($this->rawPayload, 'currency');
 		$shippingInfo = is_null($this->getOrNull($this->rawPayload, 'shippingInfo'))
 			? $this->normalizeShippingInfo($this->getOrNull($this->rawPayload, 'shipping'))
 			: $this->rawPayload['shippingInfo'];
@@ -61,13 +56,14 @@ class CheckoutSession
 		];
 	}
 
-	private function normalizeCustomerInfo()
+	protected function normalizeCustomerInfo()
 	{
 		$data = [];
 
 		if (array_key_exists('customerInfo', $this->rawPayload)) {
 			$data = $this->rawPayload['customerInfo'];
 		} else if (array_key_exists('customer', $this->rawPayload)) {
+            trigger_error("Since smartpay-co/sdk-php v0.6.0: `customer` field in raw CheckoutSession payload was deprecated. Use `customerInfo` instead.", E_USER_DEPRECATED);
 			$data = $this->rawPayload['customer'];
 		}
 
@@ -90,7 +86,7 @@ class CheckoutSession
 		];
 	}
 
-	private function normalizeShippingInfo($data)
+    protected function normalizeShippingInfo($data)
 	{
 		if (is_null($data)) {
 			return null;
@@ -120,7 +116,7 @@ class CheckoutSession
 		return $shippingInfo;
 	}
 
-	private function normalizeAddress($data)
+    protected function normalizeAddress($data)
 	{
 		return [
 			'line1' => $this->getOrNull($data, 'line1'),
@@ -136,7 +132,7 @@ class CheckoutSession
 		];
 	}
 
-	private function normalizeItemData($data)
+    protected function normalizeItemData($data)
 	{
 		if (is_null($data)) {
 			return null;
@@ -169,17 +165,13 @@ class CheckoutSession
 		return $result;
 	}
 
-	private function getOrNull($array, $key)
+    protected function getOrNull($array, $key)
 	{
-		$value = null;
-		if (array_key_exists($key, $array)) {
-			$value = $array[$key];
-		}
-		return $value;
+        return $this->getOr($array, $key, null);
 	}
 
 
-	private function getOr($array, $key, $default)
+    protected function getOr($array, $key, $default)
 	{
 		$value = $default;
 		if (array_key_exists($key, $array)) {

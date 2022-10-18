@@ -5,6 +5,7 @@ namespace Smartpay;
 use Smartpay\Client;
 use Smartpay\Smartpay;
 use Smartpay\Requests\CheckoutSession as CheckoutSessionRequest;
+use Smartpay\Requests\CheckoutSessionForToken as CheckoutSessionForTokenRequest;
 use Smartpay\Responses\CheckoutSession as CheckoutSessionResponse;
 use Smartpay\Requests\Payment as PaymentRequest;
 use Smartpay\Requests\Refund as RefundRequest;
@@ -29,9 +30,27 @@ class Api
         $this->client = is_null($client) ? new Client() : $client;
     }
 
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
     public function checkoutSession($rawPayload)
     {
+        if (isset($rawPayload['mode']) && ($rawPayload['mode'] == "token")) {
+            return $this->checkoutSessionForToken($rawPayload);
+        }
+
         $request = new CheckoutSessionRequest($rawPayload);
+        return new CheckoutSessionResponse(
+            $this->client->post('/checkout-sessions', $request->toRequest())
+        );
+    }
+
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
+    public function checkoutSessionForToken($rawPayload)
+    {
+        $request = new CheckoutSessionForTokenRequest($rawPayload);
         return new CheckoutSessionResponse(
             $this->client->post('/checkout-sessions', $request->toRequest())
         );
@@ -71,6 +90,9 @@ class Api
     }
 
 
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
     public function createPayment($rawPayload)
     {
         $request = new PaymentRequest($rawPayload);
@@ -92,11 +114,17 @@ class Api
         );
     }
 
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
     public function capture($rawPayload)
     {
         return $this->createPayment($rawPayload);
     }
 
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
     public function createRefund($rawPayload)
     {
         $request = new RefundRequest($rawPayload);
@@ -105,6 +133,9 @@ class Api
         );
     }
 
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
     public function refund($rawPayload)
     {
         return $this->createRefund($rawPayload);
@@ -127,6 +158,9 @@ class Api
      * Webhook Endpoint
      */
 
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
     public function createWebhookEndpoint($rawPayload)
     {
         $request = new WebhookEndpointRequest($rawPayload);

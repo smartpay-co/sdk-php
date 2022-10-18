@@ -18,7 +18,7 @@ final class CheckoutSessionTest extends TestCase
                 "currency" => "JPY",
                 "quantity" => 1
             ]],
-            "customer" => [
+            "customerInfo" => [
                 "accountAge" => 20,
                 "email" => "merchant-support@smartpay.co",
                 "firstName" => "田中",
@@ -49,6 +49,7 @@ final class CheckoutSessionTest extends TestCase
         ];
 
         $request = new CheckoutSession($payload);
+
         $this->assertEquals($request->toRequest(), [
             "customerInfo" => [
                 "accountAge" => 20,

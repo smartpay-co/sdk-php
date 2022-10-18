@@ -66,7 +66,7 @@ $payload = [
       'kind' => 'tax'
     ]
   ],
-  'customer' => [
+  'customerInfo' => [
     'accountAge' => 20,
     'email' => 'merchant-support@smartpay.co',
     'firstName' => '田中',
