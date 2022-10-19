@@ -2,13 +2,10 @@
 
 namespace Tests\Integrations;
 
-use Tests\TestCase;
-
 use Smartpay\Smartpay;
-
 use GuzzleHttp\Client as GuzzleClient;
 
-final class OrderLifecycleTest extends TestCase
+final class OrderLifecycleTest extends BaseTestCase
 {
     public function testOrderLifecycle()
     {
@@ -69,30 +66,13 @@ final class OrderLifecycleTest extends TestCase
 
         $orderId = $checkoutSession['order']['id'];
 
-        $client = new GuzzleClient([
-            'base_uri' => "https://" . getenv('API_BASE'),
-            'timeout'  => Smartpay::getPostTimeout(),
-        ]);
-
-        $loginPayload = [
-            "emailAddress" => getenv('TEST_USERNAME'),
-            "password" => getenv('TEST_PASSWORD')
-        ];
-        $loginResponse = $client->post('/consumers/auth/login', [
-            'headers' => [
-                'Accept' => 'application/json',
-                'ContentType' => 'application/json'
-            ],
-            'json' => $loginPayload
-        ]);
-        $loginResponseData = json_decode(strval($loginResponse->getBody()), true);
-        $accessToken = $loginResponseData['accessToken'];
+        $accessToken = $this->userLoginAndGetAccessToken();
 
         $authorizationPayload = [
             "paymentMethod" => "pm_test_visaApproved",
             "paymentPlan" => "pay_in_three"
         ];
-        $client->post('/orders/' . $orderId . '/authorizations', [
+        $this->getHttpClient()->post('/orders/' . $orderId . '/authorizations', [
             'headers' => [
                 'Authorization' => 'Bearer ' . strval($accessToken),
                 'Accept' => 'application/json',

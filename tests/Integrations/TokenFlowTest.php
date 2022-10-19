@@ -3,9 +3,8 @@
 namespace Tests\Integrations;
 
 use Smartpay\Errors\InvalidRequestPayloadError;
-use Tests\TestCase;
 
-final class TokenFlowTest extends TestCase
+final class TokenFlowTest extends BaseTestCase
 {
     /**
      * @throws InvalidRequestPayloadError
@@ -44,9 +43,39 @@ final class TokenFlowTest extends TestCase
 
         $checkoutSession = $checkoutSessionResponse->asJson();
 
-        static::assertArrayHasKey('id', $checkoutSession);
-        static::assertArrayHasKey('token', $checkoutSession);
-        static::assertArrayHasKey('id', $checkoutSession['token']);
-        static::assertSame('recurring', $checkoutSession['token']['type']);
+        $this->assertArrayHasKey('id', $checkoutSession);
+        $this->assertArrayHasKey('token', $checkoutSession);
+        $this->assertArrayHasKey('id', $checkoutSession['token']);
+        $this->assertSame('recurring', $checkoutSession['token']['type']);
+
+        // Approve token
+        $tokenId = $checkoutSession['token']['id'];
+        $accessToken = $this->userLoginAndGetAccessToken();
+        $this->getHttpClient()->put('/tokens/' . $tokenId . '/approve', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $accessToken,
+                'Accept' => 'application/json',
+                'ContentType' => 'application/json'
+            ]
+        ]);
+
+        // Test disable token
+        $api->disableToken(['id'=>$tokenId]);
+        $token = $api->getToken(['id'=>$tokenId])->asJson();
+        $this->assertSame("disabled", $token['status']);
+
+        // Test enable token
+        $api->enableToken(['id'=>$tokenId]);
+        $token = $api->getToken(['id'=>$tokenId])->asJson();
+        $this->assertSame("active", $token['status']);
+
+        // Test list token
+        $tokens = $api->getTokens(['maxResults'=>2])->asJson();
+        $this->assertGreaterThan(0, $tokens['data']);
+
+        // Test delete token
+        $api->deleteToken(['id'=>$tokenId]);
+        $token = $api->getToken(['id'=>$tokenId])->asJson();
+        $this->assertSame("deleted", $token['status']);
     }
 }
