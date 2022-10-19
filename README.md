@@ -85,7 +85,7 @@ $payload = [
     'dateOfBirth' => '1985-06-30',
     'gender' => 'male',
   ],
-  'shipping' => [
+  'shippingInfo' => [
     'line1' => '北青山 3-6-7',
     'line2' => '青山パラシオタワー 11階',
     'subLocality' => '',

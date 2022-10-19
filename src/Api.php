@@ -6,12 +6,13 @@ use Smartpay\Client;
 use Smartpay\Smartpay;
 use Smartpay\Requests\CheckoutSession as CheckoutSessionRequest;
 use Smartpay\Requests\CheckoutSessionForToken as CheckoutSessionForTokenRequest;
-use Smartpay\Responses\CheckoutSession as CheckoutSessionResponse;
+use Smartpay\Requests\Order as OrderRequest;
 use Smartpay\Requests\Payment as PaymentRequest;
 use Smartpay\Requests\Refund as RefundRequest;
 use Smartpay\Requests\WebhookEndpoint as WebhookEndpointRequest;
-use Smartpay\Responses\Base as BaseResponse;
 
+use Smartpay\Responses\Base as BaseResponse;
+use Smartpay\Responses\CheckoutSession as CheckoutSessionResponse;
 /**
  * Class Smartpay.
  */
@@ -89,6 +90,16 @@ class Api
         );
     }
 
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
+    public function createOrder($rawPayload)
+    {
+        $request = new OrderRequest($rawPayload);
+        return new BaseResponse(
+            $this->client->post('/orders', $request->toRequest())
+        );
+    }
 
     /**
      * @throws Errors\InvalidRequestPayloadError

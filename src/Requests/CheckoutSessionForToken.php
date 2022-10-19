@@ -3,12 +3,17 @@
 namespace Smartpay\Requests;
 
 use Smartpay\Errors\InvalidRequestPayloadError;
+use Smartpay\Requests\Traits\OrderTrait;
+use Smartpay\Requests\Traits\RequestTrait;
 
 /**
  * Class CheckoutSessionForToken.
  */
-class CheckoutSessionForToken extends CheckoutSession
+class CheckoutSessionForToken
 {
+    use RequestTrait;
+    use OrderTrait;
+
 	const REQUIREMENT_KEY_NAME = ['successUrl', 'cancelUrl', 'customerInfo', 'mode', 'tokenType'];
     const ALLOWED_LOCALE_VALUES = ['en', 'ja'];
     const ALLOWED_TOKEN_TYPE_VALUES = ['recurring', 'one-click', 'pre-order'];
@@ -18,11 +23,9 @@ class CheckoutSessionForToken extends CheckoutSession
      */
     public function toRequest()
 	{
-		for ($i = 0; $i < count(self::REQUIREMENT_KEY_NAME); ++$i) {
-			if (!array_key_exists(self::REQUIREMENT_KEY_NAME[$i], $this->rawPayload)) {
-                throw new InvalidRequestPayloadError('Invalid request');
-			}
-		}
+        if (!$this->requiredKeysExist($this->rawPayload, self::REQUIREMENT_KEY_NAME)) {
+            throw new InvalidRequestPayloadError('Invalid request');
+        }
 
         if ($this->rawPayload['mode'] != 'token') {
             throw new InvalidRequestPayloadError('Invalid request');
@@ -43,15 +46,13 @@ class CheckoutSessionForToken extends CheckoutSession
 
     protected function normalize()
 	{
-		$metadata = is_null($this->getOrNull($this->rawPayload, 'metadata')) ? null : $this->rawPayload['metadata'];
-
 		return [
             'mode' => $this->getOrNull($this->rawPayload, 'mode'),
             'tokenType' => $this->getOrNull($this->rawPayload, 'tokenType'),
             'locale' => $this->getOrNull($this->rawPayload, 'locale'),
 			'customerInfo' => $this->normalizeCustomerInfo(),
 			'reference' => $this->getOrNull($this->rawPayload, 'reference'),
-			'metadata' => $metadata,
+            'metadata' => $this->getOrNull($this->rawPayload, 'metadata'),
 			'successUrl' => $this->getOrNull($this->rawPayload, 'successUrl'),
 			'cancelUrl' => $this->getOrNull($this->rawPayload, 'cancelUrl'),
 		];
