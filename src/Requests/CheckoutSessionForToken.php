@@ -14,7 +14,7 @@ class CheckoutSessionForToken
     use RequestTrait;
     use OrderTrait;
 
-	const REQUIREMENT_KEY_NAME = ['successUrl', 'cancelUrl', 'customerInfo', 'mode', 'tokenType'];
+    const REQUIREMENT_KEY_NAME = ['successUrl', 'cancelUrl', 'customerInfo', 'mode', 'tokenType'];
     const ALLOWED_LOCALE_VALUES = ['en', 'ja'];
     const ALLOWED_TOKEN_TYPE_VALUES = ['recurring', 'one-click', 'pre-order'];
 
@@ -22,7 +22,7 @@ class CheckoutSessionForToken
      * @throws InvalidRequestPayloadError
      */
     public function toRequest()
-	{
+    {
         if (!$this->requiredKeysExist($this->rawPayload, self::REQUIREMENT_KEY_NAME)) {
             throw new InvalidRequestPayloadError('Invalid request');
         }
@@ -41,20 +41,20 @@ class CheckoutSessionForToken
             throw new InvalidRequestPayloadError('Invalid locale');
         }
 
-		return $this->normalize();
-	}
+        return $this->normalize();
+    }
 
     protected function normalize()
-	{
-		return [
+    {
+        return [
             'mode' => $this->getOrNull($this->rawPayload, 'mode'),
             'tokenType' => $this->getOrNull($this->rawPayload, 'tokenType'),
             'locale' => $this->getOrNull($this->rawPayload, 'locale'),
-			'customerInfo' => $this->normalizeCustomerInfo(),
-			'reference' => $this->getOrNull($this->rawPayload, 'reference'),
+            'customerInfo' => $this->normalizeCustomerInfo(),
+            'reference' => $this->getOrNull($this->rawPayload, 'reference'),
             'metadata' => $this->getOrNull($this->rawPayload, 'metadata'),
-			'successUrl' => $this->getOrNull($this->rawPayload, 'successUrl'),
-			'cancelUrl' => $this->getOrNull($this->rawPayload, 'cancelUrl'),
-		];
-	}
+            'successUrl' => $this->getOrNull($this->rawPayload, 'successUrl'),
+            'cancelUrl' => $this->getOrNull($this->rawPayload, 'cancelUrl'),
+        ];
+    }
 }
