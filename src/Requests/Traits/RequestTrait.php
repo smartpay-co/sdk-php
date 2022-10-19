@@ -37,9 +37,4 @@ trait RequestTrait
         }
         return true;
     }
-
-//    protected function getMetadata()
-//    {
-//        return is_null($this->getOrNull($this->rawPayload, 'metadata')) ? null : $this->rawPayload['metadata'];
-//    }
 }
