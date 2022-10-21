@@ -8,7 +8,7 @@ use Smartpay\Smartpay;
 
 use GuzzleHttp\Client as GuzzleClient;
 
-final class OrderLifecycleTest extends TestCase
+final class OrderLifeCycleTest extends TestCase
 {
     public function testOrderLifecycle()
     {

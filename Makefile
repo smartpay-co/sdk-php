@@ -6,6 +6,8 @@ integration-test: guard-SMARTPAY_SECRET_KEY guard-SMARTPAY_PUBLIC_KEY guard-API_
 test: guard-SMARTPAY_SECRET_KEY guard-SMARTPAY_PUBLIC_KEY guard-API_BASE
 	XDEBUG_MODE=coverage vendor/bin/phpunit tests --testdox --coverage-text --whitelist src/
 
+clean-composer:
+	rm -rf composer.lock vendor
 
 guard-%: GUARD
 	@ if [ -z '${${*}}' ]; then echo 'Environment variable $* not set.' && exit 1; fi
