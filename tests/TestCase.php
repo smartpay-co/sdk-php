@@ -4,9 +4,9 @@ namespace Tests;
 
 use Smartpay\Smartpay;
 
-abstract class TestCase extends \PHPUnit\Framework\TestCase
+abstract class TestCase extends \Yoast\PHPUnitPolyfills\TestCases\TestCase
 {
-    public function setUp()
+    public function set_up()
     {
         Smartpay::reset();
 
@@ -22,7 +22,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function tearDown()
+    public function tear_down()
     {
         Smartpay::reset();
     }
