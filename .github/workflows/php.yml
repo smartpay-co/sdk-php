@@ -1,0 +1,56 @@
+name: PHP tests
+on: [push, pull_request]
+jobs:
+  # Check there is no syntax errors in the project
+  php-linter:
+    name: PHP Syntax check 5.6 => 8.1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
+
+      - name: PHP syntax checker 5.6
+        uses: prestashop/github-action-php-lint/5.6@master
+
+      - name: PHP syntax checker 7.2
+        uses: prestashop/github-action-php-lint/7.2@master
+
+      - name: PHP syntax checker 7.3
+        uses: prestashop/github-action-php-lint/7.3@master
+
+      - name: PHP syntax checker 7.4
+        uses: prestashop/github-action-php-lint/7.4@master
+
+      - name: PHP syntax checker 8.0
+        uses: prestashop/github-action-php-lint/8.0@master
+
+      - name: PHP syntax checker 8.1
+        uses: prestashop/github-action-php-lint/8.1@master
+
+  # Check the PHP code follow the coding standards
+  php-cs-fixer:
+    name: PHP-CS-Fixer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '5.6'
+
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: php-${{ hashFiles('composer.lock') }}
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Run PHP-CS-Fixer for src
+        run: ./vendor/bin/php-cs-fixer fix src --dry-run --diff --using-cache=no
+
+      - name: Run PHP-CS-Fixer for tests
+        run: ./vendor/bin/php-cs-fixer fix tests --dry-run --diff --using-cache=no
