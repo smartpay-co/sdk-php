@@ -133,7 +133,7 @@ final class OrderLifeCycleTest extends TestCase
         $retrivedPayment2 = $retrivedPayment2Response->asJson();
 
         static::assertSame($retrivedPayment2['id'], $payment2['id']);
-        static::assertEquals($retrivedPayment2['amount'],  $PAYMENT_AMOUNT + 1);
+        static::assertEquals($retrivedPayment2['amount'], $PAYMENT_AMOUNT + 1);
 
         $orderResponse = $api->getOrder([
             'id' => $orderId,
@@ -173,7 +173,8 @@ final class OrderLifeCycleTest extends TestCase
         static::assertSame($cancelOrder['status'], 'succeeded');
     }
 
-    public function testLineItems() {
+    public function testLineItems()
+    {
         $api = new \Smartpay\Api(getenv('SMARTPAY_SECRET_KEY'), getenv('SMARTPAY_PUBLIC_KEY'));
 
         $checkoutSessionResponse = $api->checkoutSession([

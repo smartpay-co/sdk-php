@@ -18,7 +18,7 @@ class Api
 {
     private $client;
 
-    public function __construct($secretKey, $publicKey = Null, $client = Null)
+    public function __construct($secretKey, $publicKey = null, $client = null)
     {
         Smartpay::setSecretKey($secretKey);
 

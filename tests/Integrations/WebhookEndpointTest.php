@@ -43,6 +43,5 @@ final class WebhookEndpointTest extends TestCase
         // List
         $webhooksResponse = $api->getWebhookEndpoints()->asJson();
         self::assertSame('collection', $webhooksResponse['object']);
-
     }
 }
