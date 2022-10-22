@@ -1,9 +1,5 @@
 name: PHP tests
-on:
-  push:
-    branches:
-      - master
-    pull_request:
+on: [push, pull_request]
 jobs:
   # Check there is no syntax errors in the project
   php-linter:
