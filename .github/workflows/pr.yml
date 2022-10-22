@@ -28,5 +28,5 @@ jobs:
           path: vendor
           key: php-${{ hashFiles('composer.lock') }}
 
-      - name: Run PHP-CS-Fixer for src
+      - name: Run Unit Tests
         run: make test-without-integration

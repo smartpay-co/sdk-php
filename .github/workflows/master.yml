@@ -7,25 +7,28 @@ on:
 
 jobs:
   build-test:
+    name: Run Tests
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        php_version: [ "5.6", "7.0", "7.1", "7.2", "7.3", "7.4", "8.0", "8.1" ]
     steps:
-      - uses: actions/checkout@v3
-      - uses: php-actions/composer@v6
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          php_version: "7.4"
-      - uses: php-actions/phpunit@v3
+          php-version: ${{ matrix.php_version }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
         with:
-          php_version: "7.4"
-          php_extensions: xdebug
-          bootstrap: vendor/autoload.php
-          configuration: test/phpunit.xml
-          args: --coverage-text
-        env:
-          XDEBUG_MODE: coverage
-          API_BASE: ${{ secrets.API_BASE }}
-          TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
-          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
-          SMARTPAY_SECRET_KEY: ${{ secrets.SMARTPAY_SECRET_KEY }}
-          SMARTPAY_PUBLIC_KEY: ${{ secrets.SMARTPAY_PUBLIC_KEY }}
-          SMARTPAY_API_PREFIX: ${{ secrets.SMARTPAY_API_PREFIX }}
+          path: vendor
+          key: php-${{ hashFiles('composer.lock') }}
+
+      - name: Run Tests
+        run: make test
