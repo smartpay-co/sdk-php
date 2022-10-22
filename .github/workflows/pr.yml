@@ -4,23 +4,29 @@ on:
   pull_request:
 
 jobs:
-  build-unit-test:
+  php-cs-fixer:
+    name: PHP-CS-Fixer
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         php_version: [ "5.6", "7.0", "7.1", "7.2", "7.3", "7.4", "8.0", "8.1" ]
-    runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-      - uses: php-actions/composer@v6
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          php_version: ${{ matrix.php_version }}
-      - uses: php-actions/phpunit@v3
+          php-version: ${{ matrix.php_version }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
         with:
-          php_version: ${{ matrix.php_version }}
-          php_extensions: xdebug
-          bootstrap: vendor/autoload.php
-          configuration: test/phpunit.xml
-          args: --coverage-text --exclude-group integration
-        env:
-          XDEBUG_MODE: coverage
+          path: vendor
+          key: php-${{ hashFiles('composer.lock') }}
+
+      - name: Run PHP-CS-Fixer for src
+        run: make test-without-integration
