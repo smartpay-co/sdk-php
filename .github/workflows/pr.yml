@@ -1,10 +1,10 @@
-name: CI
+name: PR
 
 on:
   pull_request:
 
 jobs:
-  php-cs-fixer:
+  unit-tests:
     name: PHP-CS-Fixer
     runs-on: ubuntu-latest
     strategy:
