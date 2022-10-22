@@ -3,7 +3,7 @@
 integration-test: guard-SMARTPAY_SECRET_KEY guard-SMARTPAY_PUBLIC_KEY guard-API_BASE
 	vendor/bin/phpunit tests/Integrations --testdox
 
-test-without-integration: guard-SMARTPAY_SECRET_KEY guard-SMARTPAY_PUBLIC_KEY guard-API_BASE
+test-without-integration:
 	vendor/bin/phpunit tests --exclude-group integration --testdox
 
 test: guard-SMARTPAY_SECRET_KEY guard-SMARTPAY_PUBLIC_KEY guard-API_BASE

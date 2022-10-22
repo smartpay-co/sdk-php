@@ -5,7 +5,7 @@ on:
 
 jobs:
   unit-tests:
-    name: PHP-CS-Fixer
+    name: Unit Tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
