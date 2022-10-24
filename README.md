@@ -1,3 +1,35 @@
+<div id="top"></div>
+
+<!-- PROJECT SHIELDS -->
+
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![Packagist][packagist-shield]][packagist-url]
+[![PHP Version][php-shield]][php-url]
+[![Apache 2.0 License][license-shield]][license-url]
+
+<br />
+<div align="center">
+  <a href="https://github.com/smartpay-co/sdk-php">
+		<picture>
+			<source media="(prefers-color-scheme: dark)" srcset="https://assets.smartpay.co/logo/banner/smartpay-logo-dark.png" />
+			<source media="(prefers-color-scheme: light)" srcset="https://assets.smartpay.co/logo/banner/smartpay-logo.png" />
+			<img alt="Smartpay" src="https://assets.smartpay.co/logo/banner/smartpay-logo.png" style="width: 797px;" />
+		</picture>
+  </a>
+
+  <p align="center">
+    <a href="https://docs.smartpay.co/"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/smartpay-co/sdk-php/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/smartpay-co/sdk-php/issues">Request Feature</a>
+  </p>
+</div>
+
 # Smartpay PHP Library
 
 The Smartpay PHP library offers easy access to Smartpay API from applications written in PHP.
@@ -129,3 +161,21 @@ Run test in the folder
 ## License
 
 The package is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/smartpay-co/sdk-php.svg
+[contributors-url]: https://github.com/smartpay-co/sdk-php/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/smartpay-co/sdk-php.svg
+[forks-url]: https://github.com/smartpay-co/sdk-php/network/members
+[stars-shield]: https://img.shields.io/github/stars/smartpay-co/sdk-php.svg
+[stars-url]: https://github.com/smartpay-co/sdk-php/stargazers
+[issues-shield]: https://img.shields.io/github/issues/smartpay-co/sdk-php.svg
+[issues-url]: https://github.com/smartpay-co/sdk-php/issues
+[license-shield]: https://img.shields.io/github/license/smartpay-co/sdk-php.svg
+[license-url]: https://github.com/smartpay-co/sdk-php/blob/main/LICENSE.txt
+[packagist-shield]: https://img.shields.io/packagist/v/smartpay-co/sdk-php.svg
+[packagist-url]: https://packagist.org/packages/smartpay-co/sdk-php
+[php-shield]: https://img.shields.io/packagist/php-v/smartpay-co/sdk-php.svg?logo=php&logoColor=white
+[php-url]: https://packagist.org/packages/smartpay-co/sdk-php
