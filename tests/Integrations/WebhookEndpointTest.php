@@ -5,6 +5,9 @@ namespace Tests\Integrations;
 use Smartpay\Errors\InvalidRequestPayloadError;
 use Tests\TestCase;
 
+/**
+ * @group integration
+ */
 final class WebhookEndpointTest extends TestCase
 {
     /**
@@ -40,6 +43,5 @@ final class WebhookEndpointTest extends TestCase
         // List
         $webhooksResponse = $api->getWebhookEndpoints()->asJson();
         self::assertSame('collection', $webhooksResponse['object']);
-
     }
 }

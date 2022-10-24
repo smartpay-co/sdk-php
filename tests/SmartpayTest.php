@@ -10,7 +10,7 @@ final class SmartpayTest extends TestCase
 {
     public function testApiUrlAccessors()
     {
-        Smartpay::setApiUrl(Null);
+        Smartpay::setApiUrl(null);
         static::assertSame('https://api.smartpay.co/v1', Smartpay::getApiUrl());
 
         Smartpay::setApiUrl('https://api.smartpay.co/v2');
@@ -21,7 +21,7 @@ final class SmartpayTest extends TestCase
     {
         static::assertSame('https://checkout.smartpay.co', Smartpay::getCheckoutUrl());
 
-        Smartpay::setCheckoutUrl(Null);
+        Smartpay::setCheckoutUrl(null);
         static::assertSame('https://checkout.smartpay.co', Smartpay::getCheckoutUrl());
 
         Smartpay::setCheckoutUrl('https://checkout.smartpay.co/v1');
@@ -32,7 +32,7 @@ final class SmartpayTest extends TestCase
     {
         static::assertSame(30, Smartpay::getPostTimeout());
 
-        Smartpay::setPostTimeout(Null);
+        Smartpay::setPostTimeout(null);
         static::assertSame(30, Smartpay::getPostTimeout());
 
         Smartpay::setPostTimeout(100);
@@ -41,7 +41,7 @@ final class SmartpayTest extends TestCase
 
     public function testPublicKeyAccessors()
     {
-        Smartpay::setPublicKey(Null);
+        Smartpay::setPublicKey(null);
         static::assertNull(Smartpay::getPublicKey());
 
         Smartpay::setPublicKey('pk_test_123');
@@ -50,7 +50,7 @@ final class SmartpayTest extends TestCase
 
     public function testSecretKeyAccessors()
     {
-        Smartpay::setSecretKey(Null);
+        Smartpay::setSecretKey(null);
         static::assertNull(Smartpay::getSecretKey());
 
         Smartpay::setSecretKey('sk_test_123');
