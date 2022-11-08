@@ -14,9 +14,8 @@ class CheckoutSessionForToken
     use RequestTrait;
     use OrderTrait;
 
-    const REQUIREMENT_KEY_NAME = ['successUrl', 'cancelUrl', 'customerInfo', 'mode', 'tokenType'];
+    const REQUIREMENT_KEY_NAME = ['successUrl', 'cancelUrl', 'customerInfo', 'mode'];
     const ALLOWED_LOCALE_VALUES = ['en', 'ja'];
-    const ALLOWED_TOKEN_TYPE_VALUES = ['recurring', 'one-click', 'pre-order'];
 
     /**
      * @throws InvalidRequestPayloadError
@@ -31,11 +30,6 @@ class CheckoutSessionForToken
             throw new InvalidRequestPayloadError('Invalid request');
         }
 
-
-        if (!in_array($this->rawPayload['tokenType'], self::ALLOWED_TOKEN_TYPE_VALUES)) {
-            throw new InvalidRequestPayloadError('Invalid tokenType');
-        }
-
         if (array_key_exists('locale', $this->rawPayload) &&
             !in_array($this->rawPayload['locale'], self::ALLOWED_LOCALE_VALUES)) {
             throw new InvalidRequestPayloadError('Invalid locale');
@@ -48,7 +42,6 @@ class CheckoutSessionForToken
     {
         return [
             'mode' => $this->getOrNull($this->rawPayload, 'mode'),
-            'tokenType' => $this->getOrNull($this->rawPayload, 'tokenType'),
             'locale' => $this->getOrNull($this->rawPayload, 'locale'),
             'customerInfo' => $this->normalizeCustomerInfo(),
             'reference' => $this->getOrNull($this->rawPayload, 'reference'),

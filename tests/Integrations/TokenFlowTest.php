@@ -16,7 +16,6 @@ final class TokenFlowTest extends BaseTestCase
         // Create a checkoutSession for a token
         $checkoutSessionResponse = $api->checkoutSession([
             "mode" => "token",
-            "tokenType" => "recurring",
             "customerInfo" => [
                 "accountAge" => 20,
                 "email" => "merchant-support@smartpay.co",
@@ -46,7 +45,6 @@ final class TokenFlowTest extends BaseTestCase
         $this->assertArrayHasKey('id', $checkoutSession);
         $this->assertArrayHasKey('token', $checkoutSession);
         $this->assertArrayHasKey('id', $checkoutSession['token']);
-        $this->assertSame('recurring', $checkoutSession['token']['type']);
 
         // Approve token
         $tokenId = $checkoutSession['token']['id'];
