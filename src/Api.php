@@ -13,6 +13,7 @@ use Smartpay\Requests\WebhookEndpoint as WebhookEndpointRequest;
 
 use Smartpay\Responses\Base as BaseResponse;
 use Smartpay\Responses\CheckoutSession as CheckoutSessionResponse;
+
 /**
  * Class Smartpay.
  */
@@ -20,7 +21,7 @@ class Api
 {
     private $client;
 
-    public function __construct($secretKey, $publicKey = Null, $client = Null)
+    public function __construct($secretKey, $publicKey = null, $client = null)
     {
         Smartpay::setSecretKey($secretKey);
 

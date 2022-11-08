@@ -20,7 +20,7 @@ trait OrderTrait
 
         if (array_key_exists('customerInfo', $this->rawPayload)) {
             $data = $this->rawPayload['customerInfo'];
-        } else if (array_key_exists('customer', $this->rawPayload)) {
+        } elseif (array_key_exists('customer', $this->rawPayload)) {
             trigger_error("Since smartpay-co/sdk-php v0.6.0: `customer` field in request payload was deprecated. Use `customerInfo` instead.", E_USER_DEPRECATED);
             $data = $this->rawPayload['customer'];
         }
@@ -128,7 +128,7 @@ trait OrderTrait
         $data = null;
         if (array_key_exists('shippingInfo', $this->rawPayload)) {
             $data = $this->rawPayload['shippingInfo'];
-        } else if (array_key_exists('shipping', $this->rawPayload)) {
+        } elseif (array_key_exists('shipping', $this->rawPayload)) {
             trigger_error("Since smartpay-co/sdk-php v0.6.0: `shipping` field in request payload was deprecated. Use `shippingInfo` instead.", E_USER_DEPRECATED);
             $data = $this->rawPayload['shipping'];
         }
