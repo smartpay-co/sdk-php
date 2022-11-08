@@ -130,6 +130,6 @@ final class TokenFlowTest extends BaseTestCase
 
         // Test delete token
         $response = $api->deleteToken(['id' => $tokenId]);
-        $this->assertSame(204,$response->getStatusCode());
+        $this->assertSame(204, $response->getStatusCode());
     }
 }
