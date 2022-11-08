@@ -5,12 +5,14 @@ namespace Smartpay;
 use Smartpay\Client;
 use Smartpay\Smartpay;
 use Smartpay\Requests\CheckoutSession as CheckoutSessionRequest;
-use Smartpay\Responses\CheckoutSession as CheckoutSessionResponse;
+use Smartpay\Requests\CheckoutSessionForToken as CheckoutSessionForTokenRequest;
+use Smartpay\Requests\Order as OrderRequest;
 use Smartpay\Requests\Payment as PaymentRequest;
 use Smartpay\Requests\Refund as RefundRequest;
 use Smartpay\Requests\WebhookEndpoint as WebhookEndpointRequest;
-use Smartpay\Responses\Base as BaseResponse;
 
+use Smartpay\Responses\Base as BaseResponse;
+use Smartpay\Responses\CheckoutSession as CheckoutSessionResponse;
 /**
  * Class Smartpay.
  */
@@ -29,9 +31,27 @@ class Api
         $this->client = is_null($client) ? new Client() : $client;
     }
 
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
     public function checkoutSession($rawPayload)
     {
+        if (isset($rawPayload['mode']) && ($rawPayload['mode'] == "token")) {
+            return $this->checkoutSessionForToken($rawPayload);
+        }
+
         $request = new CheckoutSessionRequest($rawPayload);
+        return new CheckoutSessionResponse(
+            $this->client->post('/checkout-sessions', $request->toRequest())
+        );
+    }
+
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
+    public function checkoutSessionForToken($rawPayload)
+    {
+        $request = new CheckoutSessionForTokenRequest($rawPayload);
         return new CheckoutSessionResponse(
             $this->client->post('/checkout-sessions', $request->toRequest())
         );
@@ -70,7 +90,20 @@ class Api
         );
     }
 
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
+    public function createOrder($rawPayload)
+    {
+        $request = new OrderRequest($rawPayload);
+        return new BaseResponse(
+            $this->client->post('/orders', $request->toRequest())
+        );
+    }
 
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
     public function createPayment($rawPayload)
     {
         $request = new PaymentRequest($rawPayload);
@@ -92,11 +125,17 @@ class Api
         );
     }
 
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
     public function capture($rawPayload)
     {
         return $this->createPayment($rawPayload);
     }
 
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
     public function createRefund($rawPayload)
     {
         $request = new RefundRequest($rawPayload);
@@ -105,6 +144,9 @@ class Api
         );
     }
 
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
     public function refund($rawPayload)
     {
         return $this->createRefund($rawPayload);
@@ -127,6 +169,9 @@ class Api
      * Webhook Endpoint
      */
 
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     */
     public function createWebhookEndpoint($rawPayload)
     {
         $request = new WebhookEndpointRequest($rawPayload);
@@ -178,6 +223,56 @@ class Api
 
         return new BaseResponse(
             $this->client->delete("/webhook-endpoints/{$id}")
+        );
+    }
+
+    /**
+     * Token
+     */
+
+    public function getToken($params)
+    {
+        $id = $params['id'];
+
+        return new BaseResponse(
+            $this->client->get("/tokens/{$id}")
+        );
+    }
+
+    public function deleteToken($params)
+    {
+        $id = $params['id'];
+
+        return new BaseResponse(
+            $this->client->delete("/tokens/{$id}")
+        );
+    }
+
+    public function getTokens($params = [])
+    {
+        $parsedParams = [
+            'pageToken' => isset($params['pageToken']) ? $params['pageToken'] : null,
+            'maxResults' => isset($params['maxResults']) ? $params['maxResults'] : null,
+        ];
+
+        return new BaseResponse(
+            $this->client->get('/tokens', $parsedParams)
+        );
+    }
+
+    public function enableToken($params)
+    {
+        $id = $params['id'];
+        return new BaseResponse(
+            $this->client->put("/tokens/{$id}/enable", [])
+        );
+    }
+
+    public function disableToken($params)
+    {
+        $id = $params['id'];
+        return new BaseResponse(
+            $this->client->put("/tokens/{$id}/disable", [])
         );
     }
 }

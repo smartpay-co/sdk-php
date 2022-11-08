@@ -3,13 +3,18 @@
 namespace Tests\Requests;
 
 use Tests\TestCase;
-use Smartpay\Requests\CheckoutSession;
+use Smartpay\Requests\Order;
+use Smartpay\Errors\InvalidRequestPayloadError;
 
-final class CheckoutSessionTest extends TestCase
+final class OrderTest extends TestCase
 {
+    /**
+     * @throws InvalidRequestPayloadError
+     */
     public function testToRequest()
     {
         $payload = [
+            "token" => "paytok_live_mhkjHoCUq587z8UhH7DJDj",
             "amount" => 350,
             "currency" => "JPY",
             "items" => [[
@@ -48,9 +53,11 @@ final class CheckoutSessionTest extends TestCase
             "cancelUrl" => "https://docs.smartpay.co/example-pages/checkout-canceled",
         ];
 
-        $request = new CheckoutSession($payload);
+        $request = new Order($payload);
 
-        $this->assertEquals($request->toRequest(), [
+        $this->assertEquals([
+            "token" => "paytok_live_mhkjHoCUq587z8UhH7DJDj",
+            "promotionCode" => null,
             "customerInfo" => [
                 "accountAge" => 20,
                 "address" => [
@@ -115,6 +122,54 @@ final class CheckoutSessionTest extends TestCase
             ],
             "successUrl" => "https://docs.smartpay.co/example-pages/checkout-successful",
             "cancelUrl" => "https://docs.smartpay.co/example-pages/checkout-canceled",
-        ]);
+        ], $request->toRequest());
+    }
+
+    /**
+     * @throws InvalidRequestPayloadError
+     */
+    public function testToRequestThrowsExceptionIfRequiredKeysDoesNotExist()
+    {
+        $payload = [
+            "currency" => "JPY",
+            "items" => [[
+                "name" => "オリジナルス STAN SMITH",
+                "amount" => 250,
+                "currency" => "JPY",
+                "quantity" => 1
+            ]],
+            "customerInfo" => [
+                "accountAge" => 20,
+                "email" => "merchant-support@smartpay.co",
+                "firstName" => "田中",
+                "lastName" => "太郎",
+                "firstNameKana" => "たなか",
+                "lastNameKana" => "たろう",
+                "address" => [
+                    "line1" => "3-6-7",
+                    "line2" => "青山パラシオタワー 11階",
+                    "subLocality" => "",
+                    "locality" => "港区北青山",
+                    "administrativeArea" => "東京都",
+                    "postalCode" => "107-0061",
+                    "country" => "JP"
+                ],
+                "dateOfBirth" => "1985-06-30",
+                "gender" => "male"
+            ],
+            "shipping" => [
+                "line1" => "line1",
+                "locality" => "locality",
+                "postalCode" => "123",
+                "country" => "JP",
+            ],
+            "reference" => "order_ref_1234567",
+            "successUrl" => "https://docs.smartpay.co/example-pages/checkout-successful",
+            "cancelUrl" => "https://docs.smartpay.co/example-pages/checkout-canceled",
+        ];
+
+        $request = new Order($payload);
+        $this->expectException(InvalidRequestPayloadError::class);
+        $request->toRequest();
     }
 }
