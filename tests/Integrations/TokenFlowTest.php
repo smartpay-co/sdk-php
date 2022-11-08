@@ -125,9 +125,11 @@ final class TokenFlowTest extends BaseTestCase
         $order = $api->createOrder($payload)->asJson();
         $this->assertArrayHasKey('id', $order);
 
-        // Test delete token
-        $api->deleteToken(['id' => $tokenId]);
         $token = $api->getToken(['id' => $tokenId])->asJson();
-        $this->assertSame("deleted", $token['status']);
+        $this->assertSame("active", $token['status']);
+
+        // Test delete token
+        $response = $api->deleteToken(['id' => $tokenId]);
+        $this->assertSame(204,$response->getStatusCode());
     }
 }
