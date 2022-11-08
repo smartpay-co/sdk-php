@@ -13,6 +13,7 @@ use Smartpay\Requests\WebhookEndpoint as WebhookEndpointRequest;
 
 use Smartpay\Responses\Base as BaseResponse;
 use Smartpay\Responses\CheckoutSession as CheckoutSessionResponse;
+
 /**
  * Class Smartpay.
  */
