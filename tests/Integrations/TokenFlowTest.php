@@ -4,6 +4,9 @@ namespace Tests\Integrations;
 
 use Smartpay\Errors\InvalidRequestPayloadError;
 
+/**
+ * @group integration
+ */
 final class TokenFlowTest extends BaseTestCase
 {
     /**
