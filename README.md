@@ -98,7 +98,7 @@ $payload = [
       'kind' => 'tax'
     ]
   ],
-  'customer' => [
+  'customerInfo' => [
     'accountAge' => 20,
     'email' => 'merchant-support@smartpay.co',
     'firstName' => '田中',
@@ -117,7 +117,7 @@ $payload = [
     'dateOfBirth' => '1985-06-30',
     'gender' => 'male',
   ],
-  'shipping' => [
+  'shippingInfo' => [
     'line1' => '北青山 3-6-7',
     'line2' => '青山パラシオタワー 11階',
     'subLocality' => '',

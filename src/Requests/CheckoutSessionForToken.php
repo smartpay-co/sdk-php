@@ -7,36 +7,43 @@ use Smartpay\Requests\Traits\OrderTrait;
 use Smartpay\Requests\Traits\RequestTrait;
 
 /**
- * Class CheckoutSession.
+ * Class CheckoutSessionForToken.
  */
-class CheckoutSession
+class CheckoutSessionForToken
 {
     use RequestTrait;
     use OrderTrait;
 
-    const REQUIREMENT_KEY_NAME = ['successUrl', 'cancelUrl', 'customerInfo', 'shippingInfo',  'currency', 'items'];
-    const CAN_FALLBACK_KEYS = ['customerInfo', 'shippingInfo']; // legacy fallback to `customer` & `shipping`. Deprecated.
+    const REQUIREMENT_KEY_NAME = ['successUrl', 'cancelUrl', 'customerInfo', 'mode'];
+    const ALLOWED_LOCALE_VALUES = ['en', 'ja'];
 
     /**
      * @throws InvalidRequestPayloadError
      */
     public function toRequest()
     {
-        if (!$this->requiredKeysExist($this->rawPayload, self::REQUIREMENT_KEY_NAME, self::CAN_FALLBACK_KEYS)) {
+        if (!$this->requiredKeysExist($this->rawPayload, self::REQUIREMENT_KEY_NAME)) {
             throw new InvalidRequestPayloadError('Invalid request');
         }
+
+        if ($this->rawPayload['mode'] != 'token') {
+            throw new InvalidRequestPayloadError('Invalid request');
+        }
+
+        if (array_key_exists('locale', $this->rawPayload) &&
+            !in_array($this->rawPayload['locale'], self::ALLOWED_LOCALE_VALUES)) {
+            throw new InvalidRequestPayloadError('Invalid locale');
+        }
+
         return $this->normalize();
     }
 
     protected function normalize()
     {
         return [
+            'mode' => $this->getOrNull($this->rawPayload, 'mode'),
+            'locale' => $this->getOrNull($this->rawPayload, 'locale'),
             'customerInfo' => $this->normalizeCustomerInfo(),
-            'amount' => $this->getOrNull($this->rawPayload, 'amount'),
-            'currency' => $this->getCurrency(),
-            'captureMethod' => $this->getOrNull($this->rawPayload, 'captureMethod'),
-            'shippingInfo' => $this->getShippingInfo(),
-            'items' => $this->normalizeItemData($this->getOrNull($this->rawPayload, 'items')),
             'reference' => $this->getOrNull($this->rawPayload, 'reference'),
             'metadata' => $this->getOrNull($this->rawPayload, 'metadata'),
             'successUrl' => $this->getOrNull($this->rawPayload, 'successUrl'),

@@ -2,16 +2,12 @@
 
 namespace Tests\Integrations;
 
-use Tests\TestCase;
-
 use Smartpay\Smartpay;
-
-use GuzzleHttp\Client as GuzzleClient;
 
 /**
  * @group integration
  */
-final class OrderLifeCycleTest extends TestCase
+final class OrderLifeCycleTest extends BaseTestCase
 {
     public function testOrderLifecycle()
     {
@@ -68,34 +64,17 @@ final class OrderLifeCycleTest extends TestCase
 
         $checkoutSession = $checkoutSessionResponse->asJson();
 
-        static::assertArrayHasKey('id', $checkoutSession);
+        $this->assertArrayHasKey('id', $checkoutSession);
 
         $orderId = $checkoutSession['order']['id'];
 
-        $client = new GuzzleClient([
-            'base_uri' => "https://" . getenv('API_BASE'),
-            'timeout'  => Smartpay::getPostTimeout(),
-        ]);
-
-        $loginPayload = [
-            "emailAddress" => getenv('TEST_USERNAME'),
-            "password" => getenv('TEST_PASSWORD')
-        ];
-        $loginResponse = $client->post('/consumers/auth/login', [
-            'headers' => [
-                'Accept' => 'application/json',
-                'ContentType' => 'application/json'
-            ],
-            'json' => $loginPayload
-        ]);
-        $loginResponseData = json_decode(strval($loginResponse->getBody()), true);
-        $accessToken = $loginResponseData['accessToken'];
+        $accessToken = $this->userLoginAndGetAccessToken();
 
         $authorizationPayload = [
             "paymentMethod" => "pm_test_visaApproved",
             "paymentPlan" => "pay_in_three"
         ];
-        $client->post('/orders/' . $orderId . '/authorizations', [
+        $this->getHttpClient()->post('/orders/' . $orderId . '/authorizations', [
             'headers' => [
                 'Authorization' => 'Bearer ' . strval($accessToken),
                 'Accept' => 'application/json',
@@ -125,15 +104,15 @@ final class OrderLifeCycleTest extends TestCase
         $payment1 = $payment1Response->asJson();
         $payment2 = $payment2Response->asJson();
 
-        static::assertArrayHasKey('id', $payment1);
-        static::assertArrayHasKey('id', $payment2);
-        static::assertEquals($payment2['amount'], $PAYMENT_AMOUNT + 1);
+        $this->assertArrayHasKey('id', $payment1);
+        $this->assertArrayHasKey('id', $payment2);
+        $this->assertEquals($payment2['amount'], $PAYMENT_AMOUNT + 1);
 
         $retrivedPayment2Response = $api->getPAyment(['id' => $payment2['id']]);
         $retrivedPayment2 = $retrivedPayment2Response->asJson();
 
-        static::assertSame($retrivedPayment2['id'], $payment2['id']);
-        static::assertEquals($retrivedPayment2['amount'], $PAYMENT_AMOUNT + 1);
+        $this->assertSame($retrivedPayment2['id'], $payment2['id']);
+        $this->assertEquals($retrivedPayment2['amount'], $PAYMENT_AMOUNT + 1);
 
         $orderResponse = $api->getOrder([
             'id' => $orderId,
@@ -163,14 +142,14 @@ final class OrderLifeCycleTest extends TestCase
         $refund1 = $refund1Response->asJson();
         $refund2 = $refund2Response->asJson();
 
-        static::assertArrayHasKey('id', $refund1);
-        static::assertArrayHasKey('id', $refund2);
-        static::assertSame($refund2['amount'], $REFUND_AMOUNT + 1);
+        $this->assertArrayHasKey('id', $refund1);
+        $this->assertArrayHasKey('id', $refund2);
+        $this->assertSame($refund2['amount'], $REFUND_AMOUNT + 1);
 
 
 
         $cancelOrder = $api->cancelOrder(['id' => $orderId])->asJson();
-        static::assertSame($cancelOrder['status'], 'succeeded');
+        $this->assertSame($cancelOrder['status'], 'succeeded');
     }
 
     public function testLineItems()
@@ -237,7 +216,7 @@ final class OrderLifeCycleTest extends TestCase
 
         $checkoutSession = $checkoutSessionResponse->asJson();
 
-        static::assertArrayHasKey('id', $checkoutSession);
+        $this->assertArrayHasKey('id', $checkoutSession);
 
         $orderId = $checkoutSession['order']['id'];
         $orderResponse = $api->getOrder([
@@ -245,8 +224,8 @@ final class OrderLifeCycleTest extends TestCase
             'expand' => 'all'
         ]);
         $order = $orderResponse->asJson();
-        static::assertArrayHasKey('kind', $order['lineItems'][0]);
-        static::assertArrayHasKey('kind', $order['lineItems'][1]);
-        static::assertArrayHasKey('kind', $order['lineItems'][2]);
+        $this->assertArrayHasKey('kind', $order['lineItems'][0]);
+        $this->assertArrayHasKey('kind', $order['lineItems'][1]);
+        $this->assertArrayHasKey('kind', $order['lineItems'][2]);
     }
 }

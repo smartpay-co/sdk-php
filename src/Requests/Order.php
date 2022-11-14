@@ -7,22 +7,21 @@ use Smartpay\Requests\Traits\OrderTrait;
 use Smartpay\Requests\Traits\RequestTrait;
 
 /**
- * Class CheckoutSession.
+ * Class Order.
  */
-class CheckoutSession
+class Order
 {
     use RequestTrait;
     use OrderTrait;
 
-    const REQUIREMENT_KEY_NAME = ['successUrl', 'cancelUrl', 'customerInfo', 'shippingInfo',  'currency', 'items'];
-    const CAN_FALLBACK_KEYS = ['customerInfo', 'shippingInfo']; // legacy fallback to `customer` & `shipping`. Deprecated.
+    const REQUIREMENT_KEY_NAME = ['successUrl', 'cancelUrl', 'customerInfo', 'shippingInfo', 'currency', 'items', 'token'];
 
     /**
      * @throws InvalidRequestPayloadError
      */
     public function toRequest()
     {
-        if (!$this->requiredKeysExist($this->rawPayload, self::REQUIREMENT_KEY_NAME, self::CAN_FALLBACK_KEYS)) {
+        if (!$this->requiredKeysExist($this->rawPayload, self::REQUIREMENT_KEY_NAME)) {
             throw new InvalidRequestPayloadError('Invalid request');
         }
         return $this->normalize();
@@ -31,6 +30,8 @@ class CheckoutSession
     protected function normalize()
     {
         return [
+            'token' => $this->getOrNull($this->rawPayload, 'token'),
+            'promotionCode' => $this->getOrNull($this->rawPayload, 'promotionCode'),
             'customerInfo' => $this->normalizeCustomerInfo(),
             'amount' => $this->getOrNull($this->rawPayload, 'amount'),
             'currency' => $this->getCurrency(),

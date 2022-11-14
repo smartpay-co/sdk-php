@@ -3,12 +3,11 @@
 namespace Tests\Integrations;
 
 use Smartpay\Errors\InvalidRequestPayloadError;
-use Tests\TestCase;
 
 /**
  * @group integration
  */
-final class WebhookEndpointTest extends TestCase
+final class WebhookEndpointTest extends BaseTestCase
 {
     /**
      * @throws InvalidRequestPayloadError
@@ -19,7 +18,7 @@ final class WebhookEndpointTest extends TestCase
 
         // Create
         $webhookEndpoint = $api->createWebhookEndpoint(['url' => 'https://example.com'])->asJson();
-        self::assertArrayHasKey('id', $webhookEndpoint);
+        $this->assertArrayHasKey('id', $webhookEndpoint);
 
         $webhookEndpointId = $webhookEndpoint['id'];
 
@@ -29,19 +28,19 @@ final class WebhookEndpointTest extends TestCase
             'url' => 'https://example.net',
             'active' => false
         ])->asJson();
-        self::assertSame('https://example.net', $updateWebhookEndpoint['url']);
+        $this->assertSame('https://example.net', $updateWebhookEndpoint['url']);
 
         // Get
         $getWebhookEndpoint = $api->getWebhookEndpoint(['id' => $webhookEndpointId]);
-        self::assertSame(200, $getWebhookEndpoint->getStatusCode());
-        self::assertSame(false, $getWebhookEndpoint->asJson()['active']);
+        $this->assertSame(200, $getWebhookEndpoint->getStatusCode());
+        $this->assertSame(false, $getWebhookEndpoint->asJson()['active']);
 
         // Delete
         $deleteWebhookEndpoint = $api->deleteWebhookEndpoint(['id' => $webhookEndpointId]);
-        self::assertSame(204, $deleteWebhookEndpoint->getStatusCode());
+        $this->assertSame(204, $deleteWebhookEndpoint->getStatusCode());
 
         // List
         $webhooksResponse = $api->getWebhookEndpoints()->asJson();
-        self::assertSame('collection', $webhooksResponse['object']);
+        $this->assertSame('collection', $webhooksResponse['object']);
     }
 }
