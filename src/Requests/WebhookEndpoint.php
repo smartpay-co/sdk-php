@@ -26,7 +26,15 @@ class WebhookEndpoint
         'promotion_code.created',
         'promotion_code.updated',
         'merchant_user.created',
-        'merchant_user.password_reset'
+        'merchant_user.password_reset',
+        "token.approved",
+        "token.rejected",
+        "token.deleted",
+        "token.disabled",
+        "token.enabled",
+        "token.created",
+        "token.used"
+
     ];
 
     /**
