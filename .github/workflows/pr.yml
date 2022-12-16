@@ -18,15 +18,20 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
+      
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-php-${{ matrix.php_version }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-${{ matrix.php_version }}-composer-
 
       - name: Install dependencies
         run: composer install
-
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: php-${{ hashFiles('composer.lock') }}
 
       - name: Run Unit Tests
         run: make test-without-integration
