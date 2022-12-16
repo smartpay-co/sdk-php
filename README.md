@@ -8,7 +8,7 @@
 [![Issues][issues-shield]][issues-url]
 [![Packagist][packagist-shield]][packagist-url]
 [![PHP Version][php-shield]][php-url]
-[![Apache 2.0 License][license-shield]][license-url]
+[![MIT License][license-shield]][license-url]
 
 <br />
 <div align="center">
@@ -174,7 +174,7 @@ The package is available as open source under the terms of the [MIT License](htt
 [issues-shield]: https://img.shields.io/github/issues/smartpay-co/sdk-php.svg
 [issues-url]: https://github.com/smartpay-co/sdk-php/issues
 [license-shield]: https://img.shields.io/github/license/smartpay-co/sdk-php.svg
-[license-url]: https://github.com/smartpay-co/sdk-php/blob/main/LICENSE.txt
+[license-url]: https://github.com/smartpay-co/sdk-php/blob/main/LICENSE
 [packagist-shield]: https://img.shields.io/packagist/v/smartpay-co/sdk-php.svg
 [packagist-url]: https://packagist.org/packages/smartpay-co/sdk-php
 [php-shield]: https://img.shields.io/packagist/php-v/smartpay-co/sdk-php.svg?logo=php&logoColor=white
