@@ -9,6 +9,7 @@
 [![Packagist][packagist-shield]][packagist-url]
 [![PHP Version][php-shield]][php-url]
 [![MIT License][license-shield]][license-url]
+[![Workflow][workflow-shield]][workflow-url]
 
 <br />
 <div align="center">
@@ -179,3 +180,5 @@ The package is available as open source under the terms of the [MIT License](htt
 [packagist-url]: https://packagist.org/packages/smartpay-co/sdk-php
 [php-shield]: https://img.shields.io/packagist/php-v/smartpay-co/sdk-php.svg?logo=php&logoColor=white
 [php-url]: https://packagist.org/packages/smartpay-co/sdk-php
+[workflow-shield]: https://github.com/smartpay-co/sdk-php/actions/workflows/master.yml/badge.svg
+[workflow-url]: https://github.com/smartpay-co/sdk-php/actions/workflows/master.yml
