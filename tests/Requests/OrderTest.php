@@ -49,15 +49,12 @@ final class OrderTest extends TestCase
                 "country" => "JP",
             ],
             "reference" => "order_ref_1234567",
-            "successUrl" => "https://docs.smartpay.co/example-pages/checkout-successful",
-            "cancelUrl" => "https://docs.smartpay.co/example-pages/checkout-canceled",
         ];
 
         $request = new Order($payload);
 
         $this->assertEquals([
             "token" => "paytok_live_mhkjHoCUq587z8UhH7DJDj",
-            "promotionCode" => null,
             "customerInfo" => [
                 "accountAge" => 20,
                 "address" => [
@@ -120,8 +117,6 @@ final class OrderTest extends TestCase
                 "addressType" => null,
                 "feeCurrency" => "JPY"
             ],
-            "successUrl" => "https://docs.smartpay.co/example-pages/checkout-successful",
-            "cancelUrl" => "https://docs.smartpay.co/example-pages/checkout-canceled",
         ], $request->toRequest());
     }
 

@@ -119,8 +119,6 @@ final class TokenFlowTest extends BaseTestCase
                 "country" => "JP",
             ],
             "reference" => "order_ref_1234567",
-            "successUrl" => "https://docs.smartpay.co/example-pages/checkout-successful",
-            "cancelUrl" => "https://docs.smartpay.co/example-pages/checkout-canceled",
         ];
         $order = $api->createOrder($payload)->asJson();
         $this->assertArrayHasKey('id', $order);
