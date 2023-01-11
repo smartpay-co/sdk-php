@@ -14,7 +14,7 @@ class Order
     use RequestTrait;
     use OrderTrait;
 
-    const REQUIREMENT_KEY_NAME = ['successUrl', 'cancelUrl', 'customerInfo', 'shippingInfo', 'currency', 'items', 'token'];
+    const REQUIREMENT_KEY_NAME = ['customerInfo', 'shippingInfo', 'currency', 'items', 'token'];
 
     /**
      * @throws InvalidRequestPayloadError
@@ -31,7 +31,6 @@ class Order
     {
         return [
             'token' => $this->getOrNull($this->rawPayload, 'token'),
-            'promotionCode' => $this->getOrNull($this->rawPayload, 'promotionCode'),
             'customerInfo' => $this->normalizeCustomerInfo(),
             'amount' => $this->getOrNull($this->rawPayload, 'amount'),
             'currency' => $this->getCurrency(),
@@ -40,8 +39,6 @@ class Order
             'items' => $this->normalizeItemData($this->getOrNull($this->rawPayload, 'items')),
             'reference' => $this->getOrNull($this->rawPayload, 'reference'),
             'metadata' => $this->getOrNull($this->rawPayload, 'metadata'),
-            'successUrl' => $this->getOrNull($this->rawPayload, 'successUrl'),
-            'cancelUrl' => $this->getOrNull($this->rawPayload, 'cancelUrl'),
         ];
     }
 }
