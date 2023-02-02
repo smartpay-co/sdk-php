@@ -65,8 +65,16 @@ final class OrderLifeCycleTest extends BaseTestCase
         $checkoutSession = $checkoutSessionResponse->asJson();
 
         $this->assertArrayHasKey('id', $checkoutSession);
-
         $orderId = $checkoutSession['order']['id'];
+
+        // Test getCheckoutSession
+        $checkoutSessionId = $checkoutSession['id'];
+        $getCheckoutSessionResponse = $api->getCheckoutSession(['id' => $checkoutSessionId]);
+        $this->assertEquals($checkoutSessionId, $getCheckoutSessionResponse->asJson()['id']);
+
+        // Test getCheckoutSessions
+        $getCheckoutSessionsResponse = $api->getCheckoutSessions(['maxResults' => 3]);
+        $this->assertEquals(3, $getCheckoutSessionsResponse->asJson()['maxResults']);
 
         $accessToken = $this->userLoginAndGetAccessToken();
 
