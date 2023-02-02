@@ -6,9 +6,9 @@ use Smartpay\Errors\InvalidRequestPayloadError;
 use Smartpay\Requests\Traits\RequestTrait;
 
 /**
- * Class PaymentUpdate.
+ * Class Refund.
  */
-class PaymentUpdate
+class RefundUpdate
 {
     use RequestTrait;
 

@@ -117,8 +117,9 @@ final class OrderLifeCycleTest extends BaseTestCase
         $this->assertEquals($PAYMENT_AMOUNT + 1, $payment2['amount']);
 
         // test updatePayment
-        $api->updatePayment(['id' => $payment2['id'], 'reference' => '54321']);
+        $updatePaymentResponse = $api->updatePayment(['id' => $payment2['id'], 'reference' => '54321']);
         $getPayment2Response = $api->getPayment(['id' => $payment2['id']]);
+        $this->assertEquals('54321', $updatePaymentResponse->asJson()['reference']);
         $getPayment2 = $getPayment2Response->asJson();
 
         $this->assertSame($getPayment2['id'], $payment2['id']);
@@ -128,6 +129,7 @@ final class OrderLifeCycleTest extends BaseTestCase
         // test getPayments
         $getPaymentsResponse = $api->getPayments(['maxResults' => 3]);
         $this->assertEquals(3, $getPaymentsResponse->asJson()['maxResults']);
+        $this->assertEquals('payment', $getPaymentsResponse->asJson()['data'][0]['object']);
 
         $orderResponse = $api->getOrder([
             'id' => $orderId,
@@ -161,7 +163,16 @@ final class OrderLifeCycleTest extends BaseTestCase
         $this->assertArrayHasKey('id', $refund2);
         $this->assertSame($refund2['amount'], $REFUND_AMOUNT + 1);
 
+        // test updateRefund
+        $updateRefundResponse = $api->updateRefund(['id' => $refund1['id'], 'reference' => '54321']);
+        $this->assertEquals('54321', $updateRefundResponse->asJson()['reference']);
+        $getRefundResponse = $api->getRefund(['id' => $refund1['id']]);
+        $this->assertEquals('54321', $getRefundResponse->asJson()['reference']);
 
+        // test getRefunds
+        $getRefundsResponse = $api->getRefunds(['maxResults' => 3]);
+        $this->assertEquals(3, $getRefundsResponse->asJson()['maxResults']);
+        $this->assertEquals('refund', $getRefundsResponse->asJson()['data'][0]['object']);
 
         $cancelOrder = $api->cancelOrder(['id' => $orderId])->asJson();
         $this->assertSame($cancelOrder['status'], 'succeeded');
