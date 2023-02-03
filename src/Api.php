@@ -19,6 +19,7 @@ use Smartpay\Requests\CouponUpdate as CouponUpdateRequest;
 use Smartpay\Requests\PromotionCode as PromotionCodeRequest;
 use Smartpay\Requests\PromotionCodeUpdate as PromotionCodeUpdateRequest;
 use Smartpay\Requests\WebhookEndpoint as WebhookEndpointRequest;
+use Smartpay\Requests\WebhookEndpointUpdate as WebhookEndpointUpdateRequest;
 
 use Smartpay\Responses\Base as BaseResponse;
 use Smartpay\Responses\CheckoutSession as CheckoutSessionResponse;
@@ -321,12 +322,10 @@ class Api
     {
         $id = $rawPayload['id'];
         unset($rawPayload['id']);
-        if (array_key_exists('eventSubscriptions', $rawPayload)) {
-            WebhookEndpointRequest::validateEventSubscriptions($rawPayload['eventSubscriptions']);
-        }
+        $request = new WebhookEndpointUpdateRequest($rawPayload);
 
         return new BaseResponse(
-            $this->client->patch("/webhook-endpoints/{$id}", $rawPayload, $idempotencyKey)
+            $this->client->patch("/webhook-endpoints/{$id}", $request->toRequest(), $idempotencyKey)
         );
     }
 

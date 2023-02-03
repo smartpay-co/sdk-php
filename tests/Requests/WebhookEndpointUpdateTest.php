@@ -4,9 +4,9 @@ namespace Tests\Requests;
 
 use Smartpay\Errors\InvalidRequestPayloadError;
 use Tests\TestCase;
-use Smartpay\Requests\WebhookEndpoint;
+use Smartpay\Requests\WebhookEndpointUpdate;
 
-final class WebhookEndpointTest extends TestCase
+final class WebhookEndpointUpdateTest extends TestCase
 {
     public function testToRequest()
     {
@@ -19,10 +19,11 @@ final class WebhookEndpointTest extends TestCase
             'eventSubscriptions' => [ 'order.authorized' ]
         ];
 
-        $request = new WebhookEndpoint($payload);
+        $request = new WebhookEndpointUpdate($payload);
         $r = $request->toRequest();
 
         $this->assertEquals($request->toRequest(), [
+            'active' => null,
             'url' => 'https://example.com',
             'description' => null,
             'metadata' => [
@@ -39,24 +40,16 @@ final class WebhookEndpointTest extends TestCase
             'url' => 'https://example.com'
         ];
 
-        $request = new WebhookEndpoint($payload);
+        $request = new WebhookEndpointUpdate($payload);
         $r = $request->toRequest();
 
         $this->assertEquals($request->toRequest(), [
+            'active' => null,
             'url' => 'https://example.com',
             'description' => null,
             'metadata' => null,
             'eventSubscriptions' => null
         ]);
-    }
-
-    public function testToRequestThrowsExceptionIfUrlIsMissing()
-    {
-        $payload = [];
-
-        $request = new WebhookEndpoint($payload);
-        $this->expectException(InvalidRequestPayloadError::class);
-        $request->toRequest();
     }
 
     public function testToRequestThrowsExceptionIfEventSubscriptionIsNotAllowed()
@@ -66,7 +59,7 @@ final class WebhookEndpointTest extends TestCase
             'eventSubscriptions' => [ 'order.authorized', 'not allowed' ]
         ];
 
-        $request = new WebhookEndpoint($payload);
+        $request = new WebhookEndpointUpdate($payload);
         $this->expectException(InvalidRequestPayloadError::class);
         $request->toRequest();
     }
