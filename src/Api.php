@@ -61,6 +61,31 @@ class Api
 
     public function getCheckoutSession($params = [])
     {
+        $id = $params['id'];
+        $parsedParams = [
+            'expand' => isset($params['expand']) ? $params['expand'] : null,
+        ];
+
+        return new BaseResponse(
+            $this->client->get("/checkout-sessions/{$id}", $parsedParams)
+        );
+    }
+
+    public function getCheckoutSessions($params = [])
+    {
+        $parsedParams = [
+            'pageToken' => isset($params['pageToken']) ? $params['pageToken'] : null,
+            'maxResults' => isset($params['maxResults']) ? $params['maxResults'] : null,
+            'expand' => isset($params['expand']) ? $params['expand'] : '',
+        ];
+
+        return new BaseResponse(
+            $this->client->get('/checkout-sessions', $parsedParams)
+        );
+    }
+
+    public function getCheckoutSession($params = [])
+    {
         list($id, $parsedParams) = $this->parseExpandableObjectParams($params);
 
         return new BaseResponse(
