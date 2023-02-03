@@ -8,6 +8,7 @@ use Smartpay\Requests\CheckoutSession as CheckoutSessionRequest;
 use Smartpay\Requests\CheckoutSessionForToken as CheckoutSessionForTokenRequest;
 use Smartpay\Requests\Order as OrderRequest;
 use Smartpay\Requests\Payment as PaymentRequest;
+use Smartpay\Requests\PaymentUpdate as PaymentUpdateRequest;
 use Smartpay\Requests\Refund as RefundRequest;
 use Smartpay\Requests\WebhookEndpoint as WebhookEndpointRequest;
 
@@ -60,10 +61,7 @@ class Api
 
     public function getCheckoutSession($params = [])
     {
-        $id = $params['id'];
-        $parsedParams = [
-            'expand' => isset($params['expand']) ? $params['expand'] : null,
-        ];
+        list($id, $parsedParams) = $this->parseExpandableObjectParams($params);
 
         return new BaseResponse(
             $this->client->get("/checkout-sessions/{$id}", $parsedParams)
@@ -72,36 +70,21 @@ class Api
 
     public function getCheckoutSessions($params = [])
     {
-        $parsedParams = [
-            'pageToken' => isset($params['pageToken']) ? $params['pageToken'] : null,
-            'maxResults' => isset($params['maxResults']) ? $params['maxResults'] : null,
-            'expand' => isset($params['expand']) ? $params['expand'] : '',
-        ];
-
         return new BaseResponse(
-            $this->client->get('/checkout-sessions', $parsedParams)
+            $this->client->get('/checkout-sessions', $this->parseCollectionParams($params))
         );
     }
 
     public function getOrders($params = [])
     {
-        $parsedParams = [
-            'pageToken' => isset($params['pageToken']) ? $params['pageToken'] : null,
-            'maxResults' => isset($params['maxResults']) ? $params['maxResults'] : null,
-            'expand' => isset($params['expand']) ? $params['expand'] : '',
-        ];
-
         return new BaseResponse(
-            $this->client->get('/orders', $parsedParams)
+            $this->client->get('/orders', $this->parseCollectionParams($params))
         );
     }
 
     public function getOrder($params = [])
     {
-        $id = $params['id'];
-        $parsedParams = [
-            'expand' => isset($params['expand']) ? $params['expand'] : null,
-        ];
+        list($id, $parsedParams) = $this->parseExpandableObjectParams($params);
 
         return new BaseResponse(
             $this->client->get("/orders/{$id}", $parsedParams)
@@ -138,16 +121,30 @@ class Api
         );
     }
 
+    public function updatePayment($rawPayload, $idempotencyKey = null)
+    {
+        $id = $rawPayload['id'];
+        unset($rawPayload['id']);
+        $request = new PaymentUpdateRequest($rawPayload);
+
+        return new BaseResponse(
+            $this->client->patch("/payments/{$id}", $request->toRequest(), $idempotencyKey)
+        );
+    }
 
     public function getPayment($params = [])
     {
-        $id = $params['id'];
-        $parsedParams = [
-            'expand' => isset($params['expand']) ? $params['expand'] : null,
-        ];
+        list($id, $parsedParams) = $this->parseExpandableObjectParams($params);
 
         return new BaseResponse(
             $this->client->get("/payments/{$id}", $parsedParams)
+        );
+    }
+
+    public function getPayments($params = [])
+    {
+        return new BaseResponse(
+            $this->client->get('/payments', $this->parseCollectionParams($params))
         );
     }
 
@@ -181,10 +178,7 @@ class Api
 
     public function getRefund($params = [])
     {
-        $id = $params['id'];
-        $parsedParams = [
-            'expand' => isset($params['expand']) ? $params['expand'] : null,
-        ];
+        list($id, $parsedParams) = $this->parseExpandableObjectParams($params);
 
         return new BaseResponse(
             $this->client->get("/refunds/{$id}", $parsedParams)
@@ -217,13 +211,8 @@ class Api
 
     public function getWebhookEndpoints($params = [])
     {
-        $parsedParams = [
-            'pageToken' => isset($params['pageToken']) ? $params['pageToken'] : null,
-            'maxResults' => isset($params['maxResults']) ? $params['maxResults'] : null,
-        ];
-
         return new BaseResponse(
-            $this->client->get('/webhook-endpoints', $parsedParams)
+            $this->client->get('/webhook-endpoints', $this->parseCollectionParams($params))
         );
     }
 
@@ -276,13 +265,8 @@ class Api
 
     public function getTokens($params = [])
     {
-        $parsedParams = [
-            'pageToken' => isset($params['pageToken']) ? $params['pageToken'] : null,
-            'maxResults' => isset($params['maxResults']) ? $params['maxResults'] : null,
-        ];
-
         return new BaseResponse(
-            $this->client->get('/tokens', $parsedParams)
+            $this->client->get('/tokens', $this->parseCollectionParams($params))
         );
     }
 
@@ -300,5 +284,31 @@ class Api
         return new BaseResponse(
             $this->client->put("/tokens/{$id}/disable", [], $idempotencyKey)
         );
+    }
+
+    /**
+     * @param $params
+     * @return array
+     */
+    private function parseCollectionParams($params)
+    {
+        return [
+            'pageToken' => isset($params['pageToken']) ? $params['pageToken'] : null,
+            'maxResults' => isset($params['maxResults']) ? $params['maxResults'] : null,
+            'expand' => isset($params['expand']) ? $params['expand'] : '',
+        ];
+    }
+
+    /**
+     * @param $params
+     * @return array
+     */
+    private function parseExpandableObjectParams($params)
+    {
+        $id = $params['id'];
+        $parsedParams = [
+            'expand' => isset($params['expand']) ? $params['expand'] : null,
+        ];
+        return array($id, $parsedParams);
     }
 }

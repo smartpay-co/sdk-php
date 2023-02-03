@@ -114,13 +114,20 @@ final class OrderLifeCycleTest extends BaseTestCase
 
         $this->assertArrayHasKey('id', $payment1);
         $this->assertArrayHasKey('id', $payment2);
-        $this->assertEquals($payment2['amount'], $PAYMENT_AMOUNT + 1);
+        $this->assertEquals($PAYMENT_AMOUNT + 1, $payment2['amount']);
 
-        $retrivedPayment2Response = $api->getPAyment(['id' => $payment2['id']]);
-        $retrivedPayment2 = $retrivedPayment2Response->asJson();
+        // test updatePayment
+        $api->updatePayment(['id' => $payment2['id'], 'reference' => '54321']);
+        $getPayment2Response = $api->getPayment(['id' => $payment2['id']]);
+        $getPayment2 = $getPayment2Response->asJson();
 
-        $this->assertSame($retrivedPayment2['id'], $payment2['id']);
-        $this->assertEquals($retrivedPayment2['amount'], $PAYMENT_AMOUNT + 1);
+        $this->assertSame($getPayment2['id'], $payment2['id']);
+        $this->assertEquals($PAYMENT_AMOUNT + 1, $getPayment2['amount']);
+        $this->assertEquals('54321', $getPayment2['reference']);
+
+        // test getPayments
+        $getPaymentsResponse = $api->getPayments(['maxResults' => 3]);
+        $this->assertEquals(3, $getPaymentsResponse->asJson()['maxResults']);
 
         $orderResponse = $api->getOrder([
             'id' => $orderId,
