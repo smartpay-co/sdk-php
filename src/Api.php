@@ -35,26 +35,26 @@ class Api
     /**
      * @throws Errors\InvalidRequestPayloadError
      */
-    public function checkoutSession($rawPayload)
+    public function checkoutSession($rawPayload, $idempotencyKey = null)
     {
         if (isset($rawPayload['mode']) && ($rawPayload['mode'] == "token")) {
-            return $this->checkoutSessionForToken($rawPayload);
+            return $this->checkoutSessionForToken($rawPayload, $idempotencyKey);
         }
 
         $request = new CheckoutSessionRequest($rawPayload);
         return new CheckoutSessionResponse(
-            $this->client->post('/checkout-sessions', $request->toRequest())
+            $this->client->post('/checkout-sessions', $request->toRequest(), $idempotencyKey)
         );
     }
 
     /**
      * @throws Errors\InvalidRequestPayloadError
      */
-    public function checkoutSessionForToken($rawPayload)
+    public function checkoutSessionForToken($rawPayload, $idempotencyKey = null)
     {
         $request = new CheckoutSessionForTokenRequest($rawPayload);
         return new CheckoutSessionResponse(
-            $this->client->post('/checkout-sessions', $request->toRequest())
+            $this->client->post('/checkout-sessions', $request->toRequest(), $idempotencyKey)
         );
     }
 
@@ -83,33 +83,33 @@ class Api
         );
     }
 
-    public function cancelOrder($params = [])
+    public function cancelOrder($params = [], $idempotencyKey = null)
     {
         $id = $params['id'];
         return new BaseResponse(
-            $this->client->put("/orders/{$id}/cancellation", [])
+            $this->client->put("/orders/{$id}/cancellation", [], $idempotencyKey)
         );
     }
 
     /**
      * @throws Errors\InvalidRequestPayloadError
      */
-    public function createOrder($rawPayload)
+    public function createOrder($rawPayload, $idempotencyKey = null)
     {
         $request = new OrderRequest($rawPayload);
         return new BaseResponse(
-            $this->client->post('/orders', $request->toRequest())
+            $this->client->post('/orders', $request->toRequest(), $idempotencyKey)
         );
     }
 
     /**
      * @throws Errors\InvalidRequestPayloadError
      */
-    public function createPayment($rawPayload)
+    public function createPayment($rawPayload, $idempotencyKey = null)
     {
         $request = new PaymentRequest($rawPayload);
         return new BaseResponse(
-            $this->client->post('/payments', $request->toRequest())
+            $this->client->post('/payments', $request->toRequest(), $idempotencyKey)
         );
     }
 
@@ -129,28 +129,28 @@ class Api
     /**
      * @throws Errors\InvalidRequestPayloadError
      */
-    public function capture($rawPayload)
+    public function capture($rawPayload, $idempotencyKey = null)
     {
-        return $this->createPayment($rawPayload);
+        return $this->createPayment($rawPayload, $idempotencyKey);
     }
 
     /**
      * @throws Errors\InvalidRequestPayloadError
      */
-    public function createRefund($rawPayload)
+    public function createRefund($rawPayload, $idempotencyKey = null)
     {
         $request = new RefundRequest($rawPayload);
         return new BaseResponse(
-            $this->client->post('/refunds', $request->toRequest())
+            $this->client->post('/refunds', $request->toRequest(), $idempotencyKey)
         );
     }
 
     /**
      * @throws Errors\InvalidRequestPayloadError
      */
-    public function refund($rawPayload)
+    public function refund($rawPayload, $idempotencyKey = null)
     {
-        return $this->createRefund($rawPayload);
+        return $this->createRefund($rawPayload, $idempotencyKey);
     }
 
 
@@ -173,11 +173,11 @@ class Api
     /**
      * @throws Errors\InvalidRequestPayloadError
      */
-    public function createWebhookEndpoint($rawPayload)
+    public function createWebhookEndpoint($rawPayload, $idempotencyKey = null)
     {
         $request = new WebhookEndpointRequest($rawPayload);
         return new BaseResponse(
-            $this->client->post('/webhook-endpoints', $request->toRequest())
+            $this->client->post('/webhook-endpoints', $request->toRequest(), $idempotencyKey)
         );
     }
 
@@ -205,7 +205,7 @@ class Api
     /**
      * @throws Errors\InvalidRequestPayloadError
      */
-    public function updateWebhookEndpoint($rawPayload)
+    public function updateWebhookEndpoint($rawPayload, $idempotencyKey = null)
     {
         $id = $rawPayload['id'];
         unset($rawPayload['id']);
@@ -214,16 +214,16 @@ class Api
         }
 
         return new BaseResponse(
-            $this->client->patch("/webhook-endpoints/{$id}", $rawPayload)
+            $this->client->patch("/webhook-endpoints/{$id}", $rawPayload, $idempotencyKey)
         );
     }
 
-    public function deleteWebhookEndpoint($params)
+    public function deleteWebhookEndpoint($params, $idempotencyKey = null)
     {
         $id = $params['id'];
 
         return new BaseResponse(
-            $this->client->delete("/webhook-endpoints/{$id}")
+            $this->client->delete("/webhook-endpoints/{$id}", $idempotencyKey)
         );
     }
 
@@ -240,12 +240,12 @@ class Api
         );
     }
 
-    public function deleteToken($params)
+    public function deleteToken($params, $idempotencyKey = null)
     {
         $id = $params['id'];
 
         return new BaseResponse(
-            $this->client->delete("/tokens/{$id}")
+            $this->client->delete("/tokens/{$id}", $idempotencyKey)
         );
     }
 
@@ -261,19 +261,19 @@ class Api
         );
     }
 
-    public function enableToken($params)
+    public function enableToken($params, $idempotencyKey = null)
     {
         $id = $params['id'];
         return new BaseResponse(
-            $this->client->put("/tokens/{$id}/enable", [])
+            $this->client->put("/tokens/{$id}/enable", [], $idempotencyKey)
         );
     }
 
-    public function disableToken($params)
+    public function disableToken($params, $idempotencyKey = null)
     {
         $id = $params['id'];
         return new BaseResponse(
-            $this->client->put("/tokens/{$id}/disable", [])
+            $this->client->put("/tokens/{$id}/disable", [], $idempotencyKey)
         );
     }
 }
