@@ -9,6 +9,7 @@ use Tests\TestCase;
 abstract class BaseTestCase extends TestCase
 {
     protected $httpClient;
+    protected $apiClient;
 
     protected function getHttpClient()
     {
@@ -36,5 +37,13 @@ abstract class BaseTestCase extends TestCase
         ]);
         $loginResponseData = json_decode(strval($loginResponse->getBody()), true);
         return $loginResponseData['accessToken'];
+    }
+
+    protected function getApiClient()
+    {
+        if (!$this->apiClient) {
+            $this->apiClient = new \Smartpay\Api(getenv('SMARTPAY_SECRET_KEY'), getenv('SMARTPAY_PUBLIC_KEY'));
+        }
+        return $this->apiClient;
     }
 }

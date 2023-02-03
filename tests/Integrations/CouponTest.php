@@ -1,0 +1,55 @@
+<?php
+
+namespace Tests\Integrations;
+
+/**
+ * @group integration
+ */
+final class CouponTest extends BaseTestCase
+{
+    public function testCreateCoupon()
+    {
+        $coupon = $this->getApiClient()->createCoupon([
+            'name' => 'test coupon from sdk-php',
+            'discountType' => 'amount',
+            'discountAmount' => 50,
+            'currency' => 'JPY'
+        ])->asJson();
+        $this->assertArrayHasKey('id', $coupon);
+
+        return $coupon['id'];
+    }
+
+    /**
+     * @depends testCreateCoupon
+     */
+    public function testUpdateCoupon($couponId)
+    {
+        $updateCoupon = $this->getApiClient()->updateCoupon([
+            'id' => $couponId,
+            'name' => 'updated coupon from sdk-php',
+            'active' => false
+        ])->asJson();
+        $this->assertSame('updated coupon from sdk-php', $updateCoupon['name']);
+        return $updateCoupon['id'];
+    }
+
+    /**
+     * @depends testUpdateCoupon
+     */
+    public function testGetCoupon($couponId)
+    {
+        $getCoupon = $this->getApiClient()->getCoupon(['id' => $couponId]);
+        $this->assertSame(200, $getCoupon->getStatusCode());
+        $this->assertSame(false, $getCoupon->asJson()['active']);
+    }
+
+    /**
+     * @depends testCreateCoupon
+     */
+    public function testGetCoupons()
+    {
+        $couponsResponse = $this->getApiClient()->getCoupons()->asJson();
+        $this->assertSame('coupon', $couponsResponse['data'][0]['object']);
+    }
+}
