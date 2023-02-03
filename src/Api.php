@@ -5,6 +5,7 @@ namespace Smartpay;
 use Exception;
 use Smartpay\Client;
 use Smartpay\Requests\Coupon;
+use Smartpay\Requests\PromotionCode;
 use Smartpay\Smartpay;
 use Smartpay\Requests\CheckoutSession as CheckoutSessionRequest;
 use Smartpay\Requests\CheckoutSessionForToken as CheckoutSessionForTokenRequest;
@@ -15,6 +16,8 @@ use Smartpay\Requests\Refund as RefundRequest;
 use Smartpay\Requests\RefundUpdate as RefundUpdateRequest;
 use Smartpay\Requests\Coupon as CouponRequest;
 use Smartpay\Requests\CouponUpdate as CouponUpdateRequest;
+use Smartpay\Requests\PromotionCode as PromotionCodeRequest;
+use Smartpay\Requests\PromotionCodeUpdate as PromotionCodeUpdateRequest;
 use Smartpay\Requests\WebhookEndpoint as WebhookEndpointRequest;
 
 use Smartpay\Responses\Base as BaseResponse;
@@ -240,6 +243,43 @@ class Api
         $request = new CouponUpdateRequest($rawPayload);
         return new BaseResponse(
             $this->client->patch("/coupons/{$id}", $request->toRequest(), $idempotencyKey)
+        );
+    }
+
+    /**
+     * PromotionCode
+     */
+
+    public function createPromotionCode($rawPayload, $idempotencyKey = null)
+    {
+        $request = new PromotionCodeRequest($rawPayload);
+        return new BaseResponse(
+            $this->client->post('/promotion-codes', $request->toRequest(), $idempotencyKey)
+        );
+    }
+
+    public function getPromotionCode($params = [])
+    {
+        $id = $params['id'];
+        return new BaseResponse(
+            $this->client->get("/promotion-codes/{$id}")
+        );
+    }
+
+    public function getPromotionCodes($params = [])
+    {
+        return new BaseResponse(
+            $this->client->get('/promotion-codes', $this->parseCollectionParams($params))
+        );
+    }
+
+    public function updatePromotionCode($rawPayload, $idempotencyKey = null)
+    {
+        $id = $rawPayload['id'];
+        unset($rawPayload['id']);
+        $request = new PromotionCodeUpdateRequest($rawPayload);
+        return new BaseResponse(
+            $this->client->patch("/promotion-codes/{$id}", $request->toRequest(), $idempotencyKey)
         );
     }
 
