@@ -34,7 +34,7 @@ class Coupon
         }
 
         if ($this->rawPayload['discountType'] == 'amount' && !array_key_exists('currency', $this->rawPayload)) {
-            throw new InvalidRequestPayloadError( 'currency is required for amount discountType');
+            throw new InvalidRequestPayloadError('currency is required for amount discountType');
         }
 
         return $this->normalize();
