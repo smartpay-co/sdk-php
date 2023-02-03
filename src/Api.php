@@ -63,7 +63,6 @@ class Api
     public function getCheckoutSession($params = [])
     {
         list($id, $parsedParams) = $this->parseExpandableObjectParams($params);
-
         return new BaseResponse(
             $this->client->get("/checkout-sessions/{$id}", $parsedParams)
         );

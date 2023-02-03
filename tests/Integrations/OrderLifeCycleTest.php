@@ -120,6 +120,7 @@ final class OrderLifeCycleTest extends BaseTestCase
         $updatePaymentResponse = $api->updatePayment(['id' => $payment2['id'], 'reference' => '54321']);
         $getPayment2Response = $api->getPayment(['id' => $payment2['id']]);
         $this->assertEquals('54321', $updatePaymentResponse->asJson()['reference']);
+
         $getPayment2 = $getPayment2Response->asJson();
 
         $this->assertSame($getPayment2['id'], $payment2['id']);
