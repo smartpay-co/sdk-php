@@ -2,7 +2,9 @@
 
 namespace Smartpay;
 
+use Exception;
 use Smartpay\Client;
+use Smartpay\Requests\Coupon;
 use Smartpay\Smartpay;
 use Smartpay\Requests\CheckoutSession as CheckoutSessionRequest;
 use Smartpay\Requests\CheckoutSessionForToken as CheckoutSessionForTokenRequest;
@@ -11,6 +13,8 @@ use Smartpay\Requests\Payment as PaymentRequest;
 use Smartpay\Requests\PaymentUpdate as PaymentUpdateRequest;
 use Smartpay\Requests\Refund as RefundRequest;
 use Smartpay\Requests\RefundUpdate as RefundUpdateRequest;
+use Smartpay\Requests\Coupon as CouponRequest;
+use Smartpay\Requests\CouponUpdate as CouponUpdateRequest;
 use Smartpay\Requests\WebhookEndpoint as WebhookEndpointRequest;
 
 use Smartpay\Responses\Base as BaseResponse;
@@ -199,6 +203,43 @@ class Api
     {
         return new BaseResponse(
             $this->client->get('/refunds', $this->parseCollectionParams($params))
+        );
+    }
+
+    /**
+     * Coupon
+     */
+
+    public function createCoupon($rawPayload, $idempotencyKey = null)
+    {
+        $request = new CouponRequest($rawPayload);
+        return new BaseResponse(
+            $this->client->post('/coupons', $request->toRequest(), $idempotencyKey)
+        );
+    }
+
+    public function getCoupon($params = [])
+    {
+        $id = $params['id'];
+        return new BaseResponse(
+            $this->client->get("/coupons/{$id}")
+        );
+    }
+
+    public function getCoupons($params = [])
+    {
+        return new BaseResponse(
+            $this->client->get('/coupons', $this->parseCollectionParams($params))
+        );
+    }
+
+    public function updateCoupon($rawPayload, $idempotencyKey = null)
+    {
+        $id = $rawPayload['id'];
+        unset($rawPayload['id']);
+        $request = new CouponUpdateRequest($rawPayload);
+        return new BaseResponse(
+            $this->client->patch("/coupons/{$id}", $request->toRequest(), $idempotencyKey)
         );
     }
 
