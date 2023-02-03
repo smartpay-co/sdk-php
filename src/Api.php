@@ -10,6 +10,7 @@ use Smartpay\Requests\Order as OrderRequest;
 use Smartpay\Requests\Payment as PaymentRequest;
 use Smartpay\Requests\PaymentUpdate as PaymentUpdateRequest;
 use Smartpay\Requests\Refund as RefundRequest;
+use Smartpay\Requests\RefundUpdate as RefundUpdateRequest;
 use Smartpay\Requests\WebhookEndpoint as WebhookEndpointRequest;
 
 use Smartpay\Responses\Base as BaseResponse;
@@ -62,7 +63,6 @@ class Api
     public function getCheckoutSession($params = [])
     {
         list($id, $parsedParams) = $this->parseExpandableObjectParams($params);
-
         return new BaseResponse(
             $this->client->get("/checkout-sessions/{$id}", $parsedParams)
         );
@@ -175,6 +175,16 @@ class Api
         return $this->createRefund($rawPayload, $idempotencyKey);
     }
 
+    public function updateRefund($rawPayload, $idempotencyKey = null)
+    {
+        $id = $rawPayload['id'];
+        unset($rawPayload['id']);
+        $request = new RefundUpdateRequest($rawPayload);
+
+        return new BaseResponse(
+            $this->client->patch("/refunds/{$id}", $request->toRequest(), $idempotencyKey)
+        );
+    }
 
     public function getRefund($params = [])
     {
@@ -182,6 +192,13 @@ class Api
 
         return new BaseResponse(
             $this->client->get("/refunds/{$id}", $parsedParams)
+        );
+    }
+
+    public function getRefunds($params = [])
+    {
+        return new BaseResponse(
+            $this->client->get('/refunds', $this->parseCollectionParams($params))
         );
     }
 
