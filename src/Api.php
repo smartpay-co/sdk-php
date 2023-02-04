@@ -19,6 +19,7 @@ use Smartpay\Requests\WebhookEndpoint as WebhookEndpointRequest;
 
 use Smartpay\Responses\Base as BaseResponse;
 use Smartpay\Responses\CheckoutSession as CheckoutSessionResponse;
+use Tuupola\Base62;
 
 /**
  * Class Smartpay.
@@ -342,6 +343,22 @@ class Api
         return new BaseResponse(
             $this->client->put("/tokens/{$id}/disable", [], $idempotencyKey)
         );
+    }
+
+    /**
+     * Webhook Signature Helpers
+     */
+
+    public function calculateWebhookSignature($data)
+    {
+        $base62 = new Base62(["characters" => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789']);
+        return hash_hmac('sha256', $data, $base62->decode(Smartpay::getSecretKey()));
+    }
+
+    public function validateWebhookSignature($data, $signature, $signatureTimestamp)
+    {
+        $calculatedSignature = $this->calculateWebhookSignature($signatureTimestamp . '.' . $data);
+        return $signature === $calculatedSignature;
     }
 
     /**
