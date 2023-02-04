@@ -54,7 +54,8 @@ final class ApiTest extends TestCase
     public function testValidateWebhookSignature()
     {
         $api = new Api('MOCKSECRETKEY');
-        $signatureValid = $api->validateWebhookSignature("test data",
+        $signatureValid = $api->validateWebhookSignature(
+            "test data",
             "30f01ff4be78d2a2b053ad4a7922c4b4eb2aee75aa5326f2c9b84b52fe4e620e",
             "test timestamp"
         );
