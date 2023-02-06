@@ -34,7 +34,6 @@ class WebhookEndpoint
         "token.enabled",
         "token.created",
         "token.used"
-
     ];
 
     /**
