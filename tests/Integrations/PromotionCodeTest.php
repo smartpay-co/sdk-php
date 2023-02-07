@@ -2,11 +2,18 @@
 
 namespace Tests\Integrations;
 
+use GuzzleHttp\Exception\GuzzleException;
+use Smartpay\Errors\InvalidRequestPayloadError;
+
 /**
  * @group integration
  */
 final class PromotionCodeTest extends BaseTestCase
 {
+    /**
+     * @throws InvalidRequestPayloadError
+     * @throws GuzzleException
+     */
     public function testCreatePromotionCode()
     {
         $coupon = $this->getApiClient()->createCoupon([
@@ -27,6 +34,7 @@ final class PromotionCodeTest extends BaseTestCase
 
     /**
      * @depends testCreatePromotionCode
+     * @throws GuzzleException
      */
     public function testUpdatePromotionCode($promotionCodeId)
     {
@@ -40,6 +48,7 @@ final class PromotionCodeTest extends BaseTestCase
 
     /**
      * @depends testUpdatePromotionCode
+     * @throws GuzzleException
      */
     public function testGetPromotionCode($promotionCodeId)
     {
@@ -50,6 +59,7 @@ final class PromotionCodeTest extends BaseTestCase
 
     /**
      * @depends testCreatePromotionCode
+     * @throws GuzzleException
      */
     public function testGetPromotionCodes()
     {
