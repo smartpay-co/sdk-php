@@ -2,6 +2,7 @@
 
 namespace Tests\Integrations;
 
+use GuzzleHttp\Exception\GuzzleException;
 use Smartpay\Errors\InvalidRequestPayloadError;
 
 /**
@@ -11,10 +12,11 @@ final class WebhookEndpointTest extends BaseTestCase
 {
     /**
      * @throws InvalidRequestPayloadError
+     * @throws GuzzleException
      */
     public function testWebhookLifecycle()
     {
-        $api = new \Smartpay\Api(getenv('SMARTPAY_SECRET_KEY'), getenv('SMARTPAY_PUBLIC_KEY'));
+        $api = $this->getApiClient();
 
         // Create
         $webhookEndpoint = $api->createWebhookEndpoint(['url' => 'https://example.com'])->asJson();

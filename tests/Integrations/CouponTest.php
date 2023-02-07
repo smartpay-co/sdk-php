@@ -2,11 +2,16 @@
 
 namespace Tests\Integrations;
 
+use GuzzleHttp\Exception\GuzzleException;
+
 /**
  * @group integration
  */
 final class CouponTest extends BaseTestCase
 {
+    /**
+     * @throws GuzzleException
+     */
     public function testCreateCoupon()
     {
         $coupon = $this->getApiClient()->createCoupon([
@@ -22,6 +27,7 @@ final class CouponTest extends BaseTestCase
 
     /**
      * @depends testCreateCoupon
+     * @throws GuzzleException
      */
     public function testUpdateCoupon($couponId)
     {
@@ -36,6 +42,7 @@ final class CouponTest extends BaseTestCase
 
     /**
      * @depends testUpdateCoupon
+     * @throws GuzzleException
      */
     public function testGetCoupon($couponId)
     {
@@ -46,6 +53,7 @@ final class CouponTest extends BaseTestCase
 
     /**
      * @depends testCreateCoupon
+     * @throws GuzzleException
      */
     public function testGetCoupons()
     {

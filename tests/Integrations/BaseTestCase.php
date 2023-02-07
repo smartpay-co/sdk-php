@@ -3,6 +3,7 @@
 namespace Tests\Integrations;
 
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\GuzzleException;
 use Smartpay\Smartpay;
 use Tests\TestCase;
 
@@ -22,6 +23,9 @@ abstract class BaseTestCase extends TestCase
         return $this->httpClient;
     }
 
+    /**
+     * @throws GuzzleException
+     */
     protected function userLoginAndGetAccessToken()
     {
         $loginPayload = [
@@ -42,7 +46,7 @@ abstract class BaseTestCase extends TestCase
     protected function getApiClient()
     {
         if (!$this->apiClient) {
-            $this->apiClient = new \Smartpay\Api(getenv('SMARTPAY_SECRET_KEY'), getenv('SMARTPAY_PUBLIC_KEY'));
+            $this->apiClient = new \Smartpay\Api();
         }
         return $this->apiClient;
     }

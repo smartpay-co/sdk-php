@@ -2,6 +2,8 @@
 
 namespace Tests\Integrations;
 
+use GuzzleHttp\Exception\GuzzleException;
+use Smartpay\Errors\InvalidRequestPayloadError;
 use Smartpay\Smartpay;
 
 /**
@@ -9,9 +11,13 @@ use Smartpay\Smartpay;
  */
 final class OrderLifeCycleTest extends BaseTestCase
 {
+    /**
+     * @throws InvalidRequestPayloadError
+     * @throws GuzzleException
+     */
     public function testOrderLifecycle()
     {
-        $api = new \Smartpay\Api(getenv('SMARTPAY_SECRET_KEY'), getenv('SMARTPAY_PUBLIC_KEY'));
+        $api = $this->getApiClient();
 
         $checkoutSessionResponse = $api->checkoutSession([
             'amount' => 400,
@@ -179,9 +185,13 @@ final class OrderLifeCycleTest extends BaseTestCase
         $this->assertSame($cancelOrder['status'], 'succeeded');
     }
 
+    /**
+     * @throws InvalidRequestPayloadError
+     * @throws GuzzleException
+     */
     public function testLineItems()
     {
-        $api = new \Smartpay\Api(getenv('SMARTPAY_SECRET_KEY'), getenv('SMARTPAY_PUBLIC_KEY'));
+        $api = $this->getApiClient();
 
         $checkoutSessionResponse = $api->checkoutSession([
             "amount" => 601,
