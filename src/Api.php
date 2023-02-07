@@ -3,6 +3,7 @@
 namespace Smartpay;
 
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Smartpay\Client;
 use Smartpay\Requests\Coupon;
 use Smartpay\Requests\PromotionCode;
@@ -31,20 +32,22 @@ use Tuupola\Base62;
 class Api
 {
     private $client;
+    private $smartpay;
 
-    public function __construct($secretKey, $publicKey = null, $client = null)
+    /**
+     * @throws Exception
+     */
+    public function __construct($secretKey = null, $publicKey = null, $client = null)
     {
-        Smartpay::setSecretKey($secretKey);
+        $this->smartpay = new Smartpay($secretKey, $publicKey);
 
-        if ($publicKey) {
-            Smartpay::setPublicKey($publicKey);
-        }
 
-        $this->client = is_null($client) ? new Client() : $client;
+        $this->client = is_null($client) ? new Client(null, $this->smartpay) : $client;
     }
 
     /**
      * @throws Errors\InvalidRequestPayloadError
+     * @throws GuzzleException
      */
     public function checkoutSession($rawPayload, $idempotencyKey = null)
     {
@@ -60,6 +63,7 @@ class Api
 
     /**
      * @throws Errors\InvalidRequestPayloadError
+     * @throws GuzzleException
      */
     public function checkoutSessionForToken($rawPayload, $idempotencyKey = null)
     {
@@ -69,6 +73,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function getCheckoutSession($params = [])
     {
         list($id, $parsedParams) = $this->parseExpandableObjectParams($params);
@@ -77,6 +84,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function getCheckoutSessions($params = [])
     {
         return new BaseResponse(
@@ -84,6 +94,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function getOrders($params = [])
     {
         return new BaseResponse(
@@ -91,6 +104,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function getOrder($params = [])
     {
         list($id, $parsedParams) = $this->parseExpandableObjectParams($params);
@@ -100,6 +116,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function cancelOrder($params = [], $idempotencyKey = null)
     {
         $id = $params['id'];
@@ -110,6 +129,7 @@ class Api
 
     /**
      * @throws Errors\InvalidRequestPayloadError
+     * @throws GuzzleException
      */
     public function createOrder($rawPayload, $idempotencyKey = null)
     {
@@ -121,6 +141,7 @@ class Api
 
     /**
      * @throws Errors\InvalidRequestPayloadError
+     * @throws GuzzleException
      */
     public function createPayment($rawPayload, $idempotencyKey = null)
     {
@@ -130,6 +151,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function updatePayment($rawPayload, $idempotencyKey = null)
     {
         $id = $rawPayload['id'];
@@ -141,6 +165,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function getPayment($params = [])
     {
         list($id, $parsedParams) = $this->parseExpandableObjectParams($params);
@@ -150,6 +177,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function getPayments($params = [])
     {
         return new BaseResponse(
@@ -159,6 +189,7 @@ class Api
 
     /**
      * @throws Errors\InvalidRequestPayloadError
+     * @throws GuzzleException
      */
     public function capture($rawPayload, $idempotencyKey = null)
     {
@@ -167,6 +198,7 @@ class Api
 
     /**
      * @throws Errors\InvalidRequestPayloadError
+     * @throws GuzzleException
      */
     public function createRefund($rawPayload, $idempotencyKey = null)
     {
@@ -178,12 +210,16 @@ class Api
 
     /**
      * @throws Errors\InvalidRequestPayloadError
+     * @throws GuzzleException
      */
     public function refund($rawPayload, $idempotencyKey = null)
     {
         return $this->createRefund($rawPayload, $idempotencyKey);
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function updateRefund($rawPayload, $idempotencyKey = null)
     {
         $id = $rawPayload['id'];
@@ -195,6 +231,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function getRefund($params = [])
     {
         list($id, $parsedParams) = $this->parseExpandableObjectParams($params);
@@ -204,6 +243,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function getRefunds($params = [])
     {
         return new BaseResponse(
@@ -215,6 +257,9 @@ class Api
      * Coupon
      */
 
+    /**
+     * @throws GuzzleException
+     */
     public function createCoupon($rawPayload, $idempotencyKey = null)
     {
         $request = new CouponRequest($rawPayload);
@@ -223,6 +268,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function getCoupon($params = [])
     {
         $id = $params['id'];
@@ -231,6 +279,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function getCoupons($params = [])
     {
         return new BaseResponse(
@@ -238,6 +289,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function updateCoupon($rawPayload, $idempotencyKey = null)
     {
         $id = $rawPayload['id'];
@@ -252,6 +306,10 @@ class Api
      * PromotionCode
      */
 
+    /**
+     * @throws Errors\InvalidRequestPayloadError
+     * @throws GuzzleException
+     */
     public function createPromotionCode($rawPayload, $idempotencyKey = null)
     {
         $request = new PromotionCodeRequest($rawPayload);
@@ -260,6 +318,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function getPromotionCode($params = [])
     {
         $id = $params['id'];
@@ -268,6 +329,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function getPromotionCodes($params = [])
     {
         return new BaseResponse(
@@ -275,6 +339,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function updatePromotionCode($rawPayload, $idempotencyKey = null)
     {
         $id = $rawPayload['id'];
@@ -291,6 +358,7 @@ class Api
 
     /**
      * @throws Errors\InvalidRequestPayloadError
+     * @throws GuzzleException
      */
     public function createWebhookEndpoint($rawPayload, $idempotencyKey = null)
     {
@@ -300,6 +368,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function getWebhookEndpoint($params = [])
     {
         $id = $params['id'];
@@ -309,6 +380,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function getWebhookEndpoints($params = [])
     {
         return new BaseResponse(
@@ -318,6 +392,7 @@ class Api
 
     /**
      * @throws Errors\InvalidRequestPayloadError
+     * @throws GuzzleException
      */
     public function updateWebhookEndpoint($rawPayload, $idempotencyKey = null)
     {
@@ -330,6 +405,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function deleteWebhookEndpoint($params, $idempotencyKey = null)
     {
         $id = $params['id'];
@@ -343,6 +421,9 @@ class Api
      * Token
      */
 
+    /**
+     * @throws GuzzleException
+     */
     public function getToken($params)
     {
         $id = $params['id'];
@@ -352,6 +433,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function deleteToken($params, $idempotencyKey = null)
     {
         $id = $params['id'];
@@ -361,6 +445,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function getTokens($params = [])
     {
         return new BaseResponse(
@@ -368,6 +455,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function enableToken($params, $idempotencyKey = null)
     {
         $id = $params['id'];
@@ -376,6 +466,9 @@ class Api
         );
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function disableToken($params, $idempotencyKey = null)
     {
         $id = $params['id'];
@@ -391,7 +484,7 @@ class Api
     public function calculateWebhookSignature($data)
     {
         $base62 = new Base62(["characters" => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789']);
-        return hash_hmac('sha256', $data, $base62->decode(Smartpay::getSecretKey()));
+        return hash_hmac('sha256', $data, $base62->decode($this->smartpay->getSecretKey()));
     }
 
     public function validateWebhookSignature($data, $signature, $signatureTimestamp)

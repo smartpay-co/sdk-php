@@ -2,6 +2,8 @@
 
 namespace Tests\Smartpay;
 
+use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Tests\TestCase;
 
 use Smartpay\Client;
@@ -12,6 +14,10 @@ use GuzzleHttp\Psr7\Response;
 
 final class ClientTest extends TestCase
 {
+    /**
+     * @throws GuzzleException
+     * @throws Exception
+     */
     public function testPost()
     {
         $mock = new MockHandler([

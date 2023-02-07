@@ -17,7 +17,6 @@ final class CheckoutSessionTest extends TestCase
 
     public function testRedirectUrl1()
     {
-        Smartpay::setPublicKey('pk_test_1234');
         $response = new CheckoutSession(
             new Response(200, ['X-Foo' => 'Bar'], '{"id": "checkout_test_oTQpCvZzZ52UvKbrN5i4B8", "url": "https://checkout.smartpay.co/checkout_test_oTQpCvZzZ52UvKbrN5i4B8"}')
         );
@@ -29,7 +28,6 @@ final class CheckoutSessionTest extends TestCase
 
     public function testRedirectUrl2()
     {
-        Smartpay::setPublicKey('pk_test_1234');
         $response = new CheckoutSession(
             new Response(200, ['X-Foo' => 'Bar'], '{"id": "checkout_test_oTQpCvZzZ52UvKbrN5i4B8", "url": "https://checkout.smartpay.co/checkout_test_oTQpCvZzZ52UvKbrN5i4B8"}')
         );

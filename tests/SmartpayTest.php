@@ -8,52 +8,38 @@ use Smartpay\Smartpay;
 
 final class SmartpayTest extends TestCase
 {
-    public function testApiUrlAccessors()
+    public function set_up()
     {
-        Smartpay::setApiUrl(null);
-        static::assertSame('https://api.smartpay.co/v1', Smartpay::getApiUrl());
-
-        Smartpay::setApiUrl('https://api.smartpay.co/v2');
-        static::assertSame('https://api.smartpay.co/v2', Smartpay::getApiUrl());
+        putenv('SMARTPAY_PUBLIC_KEY');
+        putenv('SMARTPAY_SECRET_KEY');
+        putenv('SMARTPAY_API_PREFIX');
+        parent::set_up();
     }
 
-    public function testCheckoutUrlAccessors()
+    public function testConstructorWithoutArguments()
     {
-        static::assertSame('https://checkout.smartpay.co', Smartpay::getCheckoutUrl());
-
-        Smartpay::setCheckoutUrl(null);
-        static::assertSame('https://checkout.smartpay.co', Smartpay::getCheckoutUrl());
-
-        Smartpay::setCheckoutUrl('https://checkout.smartpay.co/v1');
-        static::assertSame('https://checkout.smartpay.co/v1', Smartpay::getCheckoutUrl());
+        $smartpay = new Smartpay();
+        $this->assertEquals('', $smartpay->getPublicKey());
+        $this->assertEquals('', $smartpay->getSecretKey());
+        $this->assertEquals(Smartpay::DEFAULT_API_URL, $smartpay->getApiUrl());
     }
 
-    public function testPostTimeoutAccessors()
+    public function testConstructorWithEnv()
     {
-        static::assertSame(30, Smartpay::getPostTimeout());
-
-        Smartpay::setPostTimeout(null);
-        static::assertSame(30, Smartpay::getPostTimeout());
-
-        Smartpay::setPostTimeout(100);
-        static::assertSame(100, Smartpay::getPostTimeout());
+        putenv('SMARTPAY_PUBLIC_KEY=public_key');
+        putenv('SMARTPAY_SECRET_KEY=secret_key');
+        putenv('SMARTPAY_API_PREFIX=api_url');
+        $smartpay = new Smartpay();
+        $this->assertEquals('public_key', $smartpay->getPublicKey());
+        $this->assertEquals('secret_key', $smartpay->getSecretKey());
+        $this->assertEquals('api_url', $smartpay->getApiUrl());
     }
 
-    public function testPublicKeyAccessors()
+    public function testConstructor()
     {
-        Smartpay::setPublicKey(null);
-        static::assertNull(Smartpay::getPublicKey());
-
-        Smartpay::setPublicKey('pk_test_123');
-        static::assertSame('pk_test_123', Smartpay::getPublicKey());
-    }
-
-    public function testSecretKeyAccessors()
-    {
-        Smartpay::setSecretKey(null);
-        static::assertNull(Smartpay::getSecretKey());
-
-        Smartpay::setSecretKey('sk_test_123');
-        static::assertSame('sk_test_123', Smartpay::getSecretKey());
+        $smartpay = new Smartpay('sec', 'pub');
+        $this->assertEquals('pub', $smartpay->getPublicKey());
+        $this->assertEquals('sec', $smartpay->getSecretKey());
+        $this->assertEquals(Smartpay::DEFAULT_API_URL, $smartpay->getApiUrl());
     }
 }

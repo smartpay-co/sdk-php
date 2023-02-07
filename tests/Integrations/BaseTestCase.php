@@ -16,7 +16,7 @@ abstract class BaseTestCase extends TestCase
         if (!$this->httpClient) {
             $this->httpClient = new GuzzleClient([
                 'base_uri' => "https://" . getenv('API_BASE'),
-                'timeout'  => Smartpay::getPostTimeout(),
+                'timeout'  => 15,
             ]);
         }
         return $this->httpClient;
