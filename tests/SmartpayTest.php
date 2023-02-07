@@ -35,6 +35,17 @@ final class SmartpayTest extends TestCase
         $this->assertEquals('api_url', $smartpay->getApiUrl());
     }
 
+    public function testConstructorPreferParametersOverEnvVars()
+    {
+        putenv('SMARTPAY_PUBLIC_KEY=public_key');
+        putenv('SMARTPAY_SECRET_KEY=secret_key');
+        putenv('SMARTPAY_API_PREFIX=api_url');
+        $smartpay = new Smartpay('sec', 'pub', 'api');
+        $this->assertEquals('pub', $smartpay->getPublicKey());
+        $this->assertEquals('sec', $smartpay->getSecretKey());
+        $this->assertEquals('api', $smartpay->getApiUrl());
+    }
+
     public function testConstructor()
     {
         $smartpay = new Smartpay('sec', 'pub');
