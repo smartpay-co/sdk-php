@@ -70,7 +70,7 @@ composer install smartpay-co/sdk-php
 The package needs to be configured with your own API keys, you can find them on your dashboard.
 
 ```php
-$api = new \Smartpay\Api('<YOUR_PUBLIC_KEY>', '<YOUR_SECRET_KEY>')
+$api = new \Smartpay\Api('<YOUR_SECRET_KEY>', '<YOUR_PUBLIC_KEY>')
 ```
 
 ### Create Checkout session
