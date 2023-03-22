@@ -73,11 +73,7 @@ Smartpay Api class instance. Methods are documented below.
 
 #### Exceptions
 
-| Type  | Description            |
-| ----- | ---------------------- |
-| Error | Secret Key is required |
-| Error | Secret Key is invalid  |
-| Error | Public Key is invalid  |
+None
 
 ### Create Checkout Session
 
@@ -198,7 +194,7 @@ The [Base Response](#base-response) object whose data is an [Order object][].
 
 ### Cancel Order
 
-**Async** method, cancel an order.
+Cancel an order.
 
 ```php
 $orderResponse = $api->cancelOrder($params, $idempotencyKey);
@@ -1124,12 +1120,10 @@ Smartpay::COUPON_DISCOUNT_TYPE_PERCENTAGE
 
 ## Common Exceptions
 
-| Type          | Error Code                   | Description                    |
-| ------------- | ---------------------------- | ------------------------------ |
-| SmartpayError | `unexpected_error`           | Unexpected network issue.      |
-| SmartpayError | `unexpected_error`           | Unable to parse response body. |
-| SmartpayError | `request.invalid`            | Required argument is missing.  |
-| SmartpayError | Error code from API response | Unable to parse response body. |
+| Type                              | Description                                        |
+| --------------------------------- | -------------------------------------------------- |
+| Errors\InvalidRequestPayloadError | Required argument is missing.                      |
+| GuzzleHttp\Exception              | Please refer to [Guzzle document][guzzleexception] |
 
 [checkout session object]: https://en.docs.smartpay.co/reference/the-checkout-session-object
 [order object]: https://en.docs.smartpay.co/reference/the-order-object
@@ -1143,3 +1137,4 @@ Smartpay::COUPON_DISCOUNT_TYPE_PERCENTAGE
 [refund]: https://en.docs.smartpay.co/docs/refund-a-purchase#using-the-smartpay-api
 [collection]: #collection
 [common exceptions]: #common-exceptions
+[guzzleexception]: https://docs.guzzlephp.org/en/stable/quickstart.html#exceptions
