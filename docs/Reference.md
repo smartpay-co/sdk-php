@@ -1,4 +1,4 @@
-# Smartpay NodeJS SDK Reference
+# Smartpay PHP SDK Reference
 
 - [Class Smartpay](#class-smartpay)
   - [Constructor](#constructor)
@@ -69,7 +69,7 @@ $api = new \Smartpay\Api($secretKey, $publicKey);
 
 #### Return
 
-Smartpay Api class instance. Methods documented below.
+Smartpay Api class instance. Methods are documented below.
 
 #### Exceptions
 
@@ -84,14 +84,15 @@ Smartpay Api class instance. Methods documented below.
 Create a checkout session.
 
 ```php
-$checkoutSession = $api->checkoutSession($payload);
+$checkoutSession = $api->checkoutSession($payload, $idempotencyKey);
 ```
 
 #### Arguments
 
-| Name    | Type  | Description                                                                      |
-| ------- | ----- | -------------------------------------------------------------------------------- |
-| payload | Array | The checkout session payload, [strict][strict-payload] or [loose][loose-payload] |
+| Name                      | Type   | Description                                                                      |
+| ------------------------- | ------ | -------------------------------------------------------------------------------- |
+| payload                   | Array  | The checkout session payload, [strict][strict-payload] or [loose][loose-payload] |
+| idempotencyKey (optional) | String | The custom idempotency key                                                       |
 
 [strict-payload]: https://en.docs.smartpay.co/reference/create-checkout-session
 [loose-payload]: https://github.com/smartpay-co/sdk-node/blob/main/docs/SimpleCheckoutSession.md
@@ -127,7 +128,7 @@ $checkoutSession = $api->getCheckoutSession($id);
 **Async** method, list checkout session objects.
 
 ```php
-$checkoutSessionsCollection = $api->getCheckoutSessions($params);
+$checkoutSessionsCollectionResponse = $api->getCheckoutSessions($params);
 ```
 
 #### Arguments
@@ -159,7 +160,7 @@ $orderResponse = $api->getOrder($params);
 
 | Name      | Type   | Description      |
 | --------- | ------ | ---------------- |
-| params    | Array  | The param object |
+| params    | Array  | The params array |
 | params.id | String | The order id     |
 
 #### Return
@@ -207,7 +208,7 @@ $orderResponse = $api->cancelOrder($params, $idempotencyKey);
 
 | Name                      | Type   | Description                |
 | ------------------------- | ------ | -------------------------- |
-| params                    | Array  | The param object           |
+| params                    | Array  | The params array           |
 | params.id                 | String | The order id               |
 | idempotencyKey (optional) | String | The custom idempotency key |
 
@@ -224,7 +225,7 @@ The [Base Response](#base-response) object whose data is [Order object][].
 List order objects.
 
 ```php
-$ordersCollection = $api->getOrders($params);
+$ordersCollectionResponse = $api->getOrders($params);
 ```
 
 #### Arguments
@@ -294,7 +295,7 @@ $paymentResponse = $api->getPayment($params);
 
 | Name      | Type   | Description      |
 | --------- | ------ | ---------------- |
-| params    | Array  | The param object |
+| params    | Array  | The params array |
 | params.id | String | The payment id   |
 
 #### Return
@@ -317,8 +318,8 @@ $paymentResponse = $api->updatePayment($payload, $idempotencyKey);
 
 | Name                           | Type   | Description                                                                                              |
 | ------------------------------ | ------ | -------------------------------------------------------------------------------------------------------- |
-| payload                        | Array  | The payload object                                                                                       |
-| payload.id                     | String | The order id                                                                                             |
+| payload                        | Array  | Partial of the [payment payload][]                                                                       |
+| payload.id                     | String | The payment id                                                                                           |
 | payload.reference (optional)   | String | A string to reference the Payment which can be used to reconcile the Payment with your internal systems. |
 | payload.description (optional) | String | An arbitrary long form explanation of the Payment, meant to be displayed to the customer.                |
 | payload.metadata (optional)    | Array  | Set of up to 20 key-value pairs that you can attach to the object.                                       |
@@ -372,7 +373,7 @@ $refundResponse = $api->createRefund($payload, $idempotencyKey);
 | payload                        | Array    | The [refund payload][]                                                                                   |
 | payload.payment                | String   | The payment id                                                                                           |
 | payload.amount                 | Number   | The amount of the refund                                                                                 |
-| payload.currency               | String   | The order id                                                                                             |
+| payload.currency               | String   | Three-letter ISO currency code, in uppercase. Must be a supported currency.                              |
 | payload.reason                 | Stirng   | The reason of the Refund. `requested_by_customer` or `fraudulent`                                        |
 | payload.lineItems (optional)   | String[] | A list of the IDs of the Line Items of the original Payment this Refund is on.                           |
 | payload.reference (optional)   | String   | A string to reference the Payment which can be used to reconcile the Payment with your internal systems. |
@@ -429,7 +430,7 @@ $refundResponse = $api->updateRefund($payload, $idempotencyKey);
 
 | Name                           | Type   | Description                                                                                              |
 | ------------------------------ | ------ | -------------------------------------------------------------------------------------------------------- |
-| payload                        | Array  | The [refund payload][]                                                                                   |
+| payload                        | Array  | Partail of the [refund payload][]                                                                        |
 | payload.id                     | String | The refund id                                                                                            |
 | payload.reference (optional)   | String | A string to reference the Payment which can be used to reconcile the Payment with your internal systems. |
 | payload.description (optional) | String | An arbitrary long form explanation of the Payment, meant to be displayed to the customer.                |
@@ -533,8 +534,8 @@ $webhookEndpointResponse = $api->updateWebhookEndpoint($payload, $idempotencyKey
 
 | Name                                  | Type     | Description                                                                                        |
 | ------------------------------------- | -------- | -------------------------------------------------------------------------------------------------- |
-| payload                               | Array    | The [webhook endpoint payload][]                                                                   |
-| payload.id                            | String   | The order id                                                                                       |
+| payload                               | Array    | Partial of the [webhook endpoint payload][]                                                        |
+| payload.id                            | String   | The webhook endpoint id                                                                            |
 | payload.active (optional)             | Boolean  | Has the value true if the webhook endpoint is active and events are sent to the url specified.     |
 | payload.url (optional)                | String   | The url which will be called when any of the events you subscribed to occur.                       |
 | payload.eventSubscriptions (optional) | String[] | The list of events to subscribe to. If not specified you will be subsribed to all events.          |
@@ -568,7 +569,7 @@ $api->deleteWebhookEndpoint($params, $idempotencyKey);
 
 #### Return
 
-Empty response body with 204
+The [Base Response](#base-response) object whose data is empty
 
 #### Exceptions
 
@@ -604,15 +605,16 @@ The [Base Response](#base-response) object whose data is a [Collection][] of [we
 Calculate the signature for webhook event of the given data.
 
 ```php
-$signature = $api->calculateWebhookSignature($data, $secret);
+$signature = $api->calculateWebhookSignature($data, $signatureTimestamp, $secret);
 ```
 
 #### Arguments
 
-| Name   | Type   | Description                       |
-| ------ | ------ | --------------------------------- |
-| data   | String | The data string                   |
-| secret | String | The Base62 encoded signing secret |
+| Name               | Type   | Description                       |
+| ------------------ | ------ | --------------------------------- |
+| data               | String | The data string                   |
+| signatureTimestamp | String | The signature timestamp           |
+| secret             | String | The Base62 encoded signing secret |
 
 #### Return
 
@@ -623,7 +625,7 @@ Signature of the data.
 Verify the signature of the given data.
 
 ```php
-$verifyResult = $api->Smartpay.verifyWebhookSignature(
+$verifyResult = $api->verifyWebhookSignature(
   $data,
   $secret,
   $signature,
@@ -652,18 +654,18 @@ $couponResponse = $api->createCoupon();
 
 #### Arguments
 
-| Name                          | Type   | Description                                                                                                        |
-| ----------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------ |
-| payload                       | Array  | The [coupon payload][]                                                                                             |
-| name                          | String | The coupon's name, meant to be displayable to the customer.                                                        |
-| discountType                  | String | Discount Type. `amount` or `percentage`                                                                            |
-| discountAmount                | Number | Required if discountType is `amount`. The amount of this coupon object.                                            |
-| discountPercentage            | Number | Required if discountType is `percentage`. The discount percentage of this coupon object.                           |
-| currency                      | String | Required if discountType is `amount`. Three-letter ISO currency code, in uppercase. Must be a supported currency.  |
-| expiresAt (optional)          | String | Time at which the Coupon expires. Measured in milliseconds since the Unix epoch.                                   |
-| maxRedemptionCount (optional) | String | Maximum number of times this coupon can be redeemed, in total, across all customers, before it is no longer valid. |
-| metadata (optional)           | Array  | Set of up to 20 key-value pairs that you can attach to the object.                                                 |
-| idempotencyKey (optional)     | String | The custom idempotency key                                                                                         |
+| Name                                  | Type   | Description                                                                                                        |
+| ------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------ |
+| payload                               | Array  | The [coupon payload][]                                                                                             |
+| payload.name                          | String | The coupon's name, meant to be displayable to the customer.                                                        |
+| payload.discountType                  | String | Discount Type. `amount` or `percentage`                                                                            |
+| payload.discountAmount                | Number | Required if discountType is `amount`. The amount of this coupon object.                                            |
+| payload.discountPercentage            | Number | Required if discountType is `percentage`. The discount percentage of this coupon object.                           |
+| payload.currency                      | String | Required if discountType is `amount`. Three-letter ISO currency code, in uppercase. Must be a supported currency.  |
+| payload.expiresAt (optional)          | String | Time at which the Coupon expires. Measured in milliseconds since the Unix epoch.                                   |
+| payload.maxRedemptionCount (optional) | String | Maximum number of times this coupon can be redeemed, in total, across all customers, before it is no longer valid. |
+| payload.metadata (optional)           | Array  | Set of up to 20 key-value pairs that you can attach to the object.                                                 |
+| idempotencyKey (optional)             | String | The custom idempotency key                                                                                         |
 
 [coupon payload]: https://en.docs.smartpay.co/reference/create-coupon
 
@@ -708,14 +710,14 @@ $couponResposne = $api->updateCoupon($payload, $idempotencyKey);
 
 #### Arguments
 
-| Name                      | Type    | Description                                                                          |
-| ------------------------- | ------- | ------------------------------------------------------------------------------------ |
-| payload                   | Array   | The [coupon payload][]                                                               |
-| id                        | String  | The coupon id                                                                        |
-| name (optional)           | String  | The coupon's name, meant to be displayable to the customer.                          |
-| active (optional)         | Boolean | Has the value true if the coupon is active and events are sent to the url specified. |
-| metadata (optional)       | Array   | Set of up to 20 key-value pairs that you can attach to the object.                   |
-| idempotencyKey (optional) | String  | The custom idempotency key                                                           |
+| Name                        | Type    | Description                                                                          |
+| --------------------------- | ------- | ------------------------------------------------------------------------------------ |
+| payload                     | Array   | Partial of the [coupon payload][]                                                    |
+| payload.id                  | String  | The coupon id                                                                        |
+| payload.name (optional)     | String  | The coupon's name, meant to be displayable to the customer.                          |
+| payload.active (optional)   | Boolean | Has the value true if the coupon is active and events are sent to the url specified. |
+| payload.metadata (optional) | Array   | Set of up to 20 key-value pairs that you can attach to the object.                   |
+| idempotencyKey (optional)   | String  | The custom idempotency key                                                           |
 
 #### Return
 
@@ -775,6 +777,8 @@ $promotionCodeResponse = $api->createPromotionCode($payload, $idempotencyKey);
 | payload.metadata (optional)             | Array   | Set of up to 20 key-value pairs that you can attach to the object.                                                                                             |
 | idempotencyKey (optional)               | String  | The custom idempotency key                                                                                                                                     |
 
+[promotion code payload]: https://en.docs.smartpay.co/reference/create-promotion-code
+
 #### Return
 
 The [Base Response](#base-response) object whose data is a [Promotion Code object][]
@@ -823,8 +827,8 @@ $promotionCodeResponse = $api->updatePromotionCode($payload, $idempotencyKey);
 
 | Name                        | Type    | Description                                                                                 |
 | --------------------------- | ------- | ------------------------------------------------------------------------------------------- |
-| payload                     | Array   | The [promotion code payload][]                                                              |
-| payload.id                  | String  | The order id                                                                                |
+| payload                     | Array   | Partial of the [promotion code payload][]                                                   |
+| payload.id                  | String  | The promotion code id                                                                       |
 | payload.active (optional)   | Boolean | Has the value true if the promotion codeis active and events are sent to the url specified. |
 | payload.metadata (optional) | Array   | Set of up to 20 key-value pairs that you can attach to the object.                          |
 | idempotencyKey (optional)   | String  | The custom idempotency key                                                                  |
@@ -995,7 +999,7 @@ The [Base Response](#base-response) object whose data is empty
 
 ### asJson
 
-Return the data object
+Return the data array
 
 ```php
 $data = $baseResponse->asJson();
@@ -1003,13 +1007,13 @@ $data = $baseResponse->asJson();
 
 #### Return
 
-The object data.
+The object data array.
 
 ## Checkout Session Response
 
 ### asJson
 
-Return the checkout session data object
+Return the checkout session data array
 
 ```php
 $checkoutSessionResponse = $api->checkoutSession($payload);
@@ -1022,7 +1026,7 @@ The [checkout session object][]
 
 ### redirectUrl
 
-Return the checkout session data object
+Return the checkout url of the session
 
 ```php
 $checkoutSessionResponse = $api->checkoutSession($payload);
@@ -1064,58 +1068,58 @@ Collection of items, a general data structure of collection data.
 ### Address Type
 
 ```
-Smartpay.ADDRESS_TYPE_HOME
-Smartpay.ADDRESS_TYPE_GIFT
-Smartpay.ADDRESS_TYPE_LOCKER
-Smartpay.ADDRESS_TYPE_OFFICE
-Smartpay.ADDRESS_TYPE_STORE
+Smartpay::ADDRESS_TYPE_HOME
+Smartpay::ADDRESS_TYPE_GIFT
+Smartpay::ADDRESS_TYPE_LOCKER
+Smartpay::ADDRESS_TYPE_OFFICE
+Smartpay::ADDRESS_TYPE_STORE
 ```
 
 ### Capture Method
 
 ```
-Smartpay.CAPTURE_METHOD_AUTOMATIC
-Smartpay.CAPTURE_METHOD_MANUAL
+Smartpay::CAPTURE_METHOD_AUTOMATIC
+Smartpay::CAPTURE_METHOD_MANUAL
 ```
 
 ### Order Status
 
 ```
-Smartpay.ORDER_STATUS_SUCCEEDED
-Smartpay.ORDER_STATUS_CANCELED
-Smartpay.ORDER_STATUS_REJECTED
-Smartpay.ORDER_STATUS_FAILED
-Smartpay.ORDER_STATUS_REQUIRES_AUTHORIZATION
+Smartpay::ORDER_STATUS_SUCCEEDED
+Smartpay::ORDER_STATUS_CANCELED
+Smartpay::ORDER_STATUS_REJECTED
+Smartpay::ORDER_STATUS_FAILED
+Smartpay::ORDER_STATUS_REQUIRES_AUTHORIZATION
 ```
 
 ### Token Status
 
 ```
-Smartpay.TOKEN_STATUS_ACTIVE
-Smartpay.TOKEN_STATUS_DISABLED
-Smartpay.TOKEN_STATUS_REJECTED
-Smartpay.TOKEN_STATUS_REQUIRES_AUTHORIZATION
+Smartpay::TOKEN_STATUS_ACTIVE
+Smartpay::TOKEN_STATUS_DISABLED
+Smartpay::TOKEN_STATUS_REJECTED
+Smartpay::TOKEN_STATUS_REQUIRES_AUTHORIZATION
 ```
 
 ### Cancel Remainder
 
 ```
-Smartpay.CANCEL_REMAINDER_AUTOMATIC
-Smartpay.CANCEL_REMAINDER_MANUAL
+Smartpay::CANCEL_REMAINDER_AUTOMATIC
+Smartpay::CANCEL_REMAINDER_MANUAL
 ```
 
 ### Refund Reason
 
 ```
-Smartpay.REFUND_REQUEST_BY_CUSTOMER
-Smartpay.REFUND_FRAUDULENT
+Smartpay::REFUND_REQUEST_BY_CUSTOMER
+Smartpay::REFUND_FRAUDULENT
 ```
 
 ### Discount Type
 
 ```
-Smartpay.COUPON_DISCOUNT_TYPE_AMOUNT
-Smartpay.COUPON_DISCOUNT_TYPE_PERCENTAGE
+Smartpay::COUPON_DISCOUNT_TYPE_AMOUNT
+Smartpay::COUPON_DISCOUNT_TYPE_PERCENTAGE
 ```
 
 ## Common Exceptions
