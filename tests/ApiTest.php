@@ -47,7 +47,7 @@ final class ApiTest extends TestCase
     public function testCalculateWebhookSignature()
     {
         $api = new Api('MOCKSECRETKEY');
-        $calculatedSignature = $api->calculateWebhookSignature("test data");
+        $calculatedSignature = $api->calculateWebhookSignature("test data", "MOCKSECRETKEY");
         $this->assertEquals('ae82b27dd6dafd0dbfc65faff07160833776cf60915782ef991557e51e4d1782', $calculatedSignature);
     }
 
@@ -57,7 +57,8 @@ final class ApiTest extends TestCase
         $signatureValid = $api->validateWebhookSignature(
             "test data",
             "30f01ff4be78d2a2b053ad4a7922c4b4eb2aee75aa5326f2c9b84b52fe4e620e",
-            "test timestamp"
+            "test timestamp",
+            "MOCKSECRETKEY"
         );
         $this->assertEquals(true, $signatureValid);
     }
