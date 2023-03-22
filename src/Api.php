@@ -484,7 +484,7 @@ class Api
     public function calculateWebhookSignature($data, $secret)
     {
         $base62 = new Base62(["characters" => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789']);
-        return hash_hmac('sha256', $data, $secret);
+        return hash_hmac('sha256', $data, $base62->decode($secret));
     }
 
     public function validateWebhookSignature($data, $signature, $signatureTimestamp, $secret)
