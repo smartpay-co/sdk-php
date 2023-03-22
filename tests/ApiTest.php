@@ -53,12 +53,17 @@ final class ApiTest extends TestCase
 
     public function testValidateWebhookSignature()
     {
+        $data = '{"id":"evt_test_dwPfFKu5iSEKyHR2LFj9Lx","object":"event","createdAt":1653028523052,"test":true,"eventData":{"type":"payment.created","version":"2022-02-18","data":{"id":"payment_test_35LxgmF5KM22XKG38BjpJg","object":"payment","test":true,"createdAt":1653028523020,"updatedAt":1653028523020,"amount":200,"currency":"JPY","order":"order_test_RiYq2rthzRHrkKVGeucSwn","reference":"order_ref_1234567","status":"processed","metadata":{}}}}';
+        $timestamp = '1653028612220';
+        $signature = '68007ada8485ea0ceca7c5e879ae860a50412b7af95ab8e81b32a3e13f3c0832';
+        $secret = 'gybcsjixKyBW2d4z6iNPlaYzHUMtawnodwZt3W0q';
+
         $api = new Api('MOCKSECRETKEY');
         $signatureValid = $api->validateWebhookSignature(
-            "test data",
-            "30f01ff4be78d2a2b053ad4a7922c4b4eb2aee75aa5326f2c9b84b52fe4e620e",
-            "test timestamp",
-            "MOCKSECRETKEY"
+            $data,
+            $signature,
+            $timestamp,
+            $secret
         );
         $this->assertEquals(true, $signatureValid);
     }
