@@ -481,15 +481,15 @@ class Api
      * Webhook Signature Helpers
      */
 
-    public function calculateWebhookSignature($data)
+    public function calculateWebhookSignature($data, $secret)
     {
         $base62 = new Base62(["characters" => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789']);
-        return hash_hmac('sha256', $data, $base62->decode($this->smartpay->getSecretKey()));
+        return hash_hmac('sha256', $data, $base62->decode($secret));
     }
 
-    public function validateWebhookSignature($data, $signature, $signatureTimestamp)
+    public function validateWebhookSignature($data, $signature, $signatureTimestamp, $secret)
     {
-        $calculatedSignature = $this->calculateWebhookSignature($signatureTimestamp . '.' . $data);
+        $calculatedSignature = $this->calculateWebhookSignature($signatureTimestamp . '.' . $data, $secret);
         return $signature === $calculatedSignature;
     }
 

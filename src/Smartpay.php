@@ -12,8 +12,34 @@ class Smartpay
 
     const DEFAULT_API_URL = "https://api.smartpay.co/v1";
 
+    const ADDRESS_TYPE_HOME = 'home';
+    const ADDRESS_TYPE_GIFT = 'gift';
+    const ADDRESS_TYPE_LOCKER = 'locker';
+    const ADDRESS_TYPE_OFFICE = 'office';
+    const ADDRESS_TYPE_STORE = 'store';
+
+    const CAPTURE_METHOD_AUTOMATIC = 'autommatic';
+    const CAPTURE_METHOD_MANUAL = 'manual';
+
+    const COUPON_DISCOUNT_TYPE_AMOUNT = 'amount';
+    const COUPON_DISCOUNT_TYPE_PERCENTAGE = 'percentage';
+
+    const ORDER_STATUS_SUCCEEDED = 'succeeded';
+    const ORDER_STATUS_CANCELED = 'canceled';
+    const ORDER_STATUS_REJECTED = 'rejected';
+    const ORDER_STATUS_FAILED = 'failed';
+    const ORDER_STATUS_REQUIRES_AUTHORIZATION = 'requires_authorization';
+
+    const CANCEL_REMAINDER_AUTOMATIC = 'autommatic';
+    const CANCEL_REMAINDER_MANUAL = 'manual';
+
     const REJECT_REQUEST_BY_CUSTOMER = 'requested_by_customer';
     const REJECT_FRAUDULENT = 'fraudulent';
+
+    const TOKEN_STATUS_ACTIVE = 'active';
+    const TOKEN_STATUS_DISABLED = 'disabled';
+    const TOKEN_STATUS_REJECTED = 'rejected';
+    const TOKEN_STATUS_REQUIRES_AUTHORIZATION = 'requires_authorization';
 
     private $apiUrl;
 
